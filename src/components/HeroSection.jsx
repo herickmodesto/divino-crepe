@@ -26,12 +26,6 @@ export default function HeroSection({ onOrderClick, onPromoAdd }) {
     }, 5000);
     return () => clearInterval(intervalRef.current);
   }, [paused]);
-  const stats = [
-    { value: "500+", label: "Clientes Felizes" },
-    { value: "100+", label: "Pratos Deliciosos" },
-    { value: "4.8⭐", label: "Avaliação" },
-  ];
-
   const getDayOfWeek = () => new Date().getDay();
   const isWeekend = getDayOfWeek() === 0 || getDayOfWeek() === 6;
 
