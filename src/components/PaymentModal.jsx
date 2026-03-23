@@ -12,11 +12,11 @@ export default function PaymentModal({
   const fee = parseFloat((form.fee || "0").replace(",", ".")) || 0;
   const total = subtotal + fee;
 
+  const isPickup = form.deliveryType === "pickup";
+
   const handleConfirm = () => {
-    if (!form.name || !form.address) {
-      alert("Por favor, preencha Nome e Endereço!");
-      return;
-    }
+    if (!form.name) { alert("Por favor, preencha seu Nome!"); return; }
+    if (!isPickup && !form.address) { alert("Por favor, preencha o Endereço de entrega!"); return; }
     onConfirm();
   };
 
@@ -57,13 +57,15 @@ export default function PaymentModal({
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
-                  <input
-                    className="pm-input-field"
-                    type="text"
-                    placeholder="Endereço de entrega"
-                    value={form.address}
-                    onChange={(e) => setForm({ ...form, address: e.target.value })}
-                  />
+                  {!isPickup && (
+                    <input
+                      className="pm-input-field"
+                      type="text"
+                      placeholder="Endereço de entrega"
+                      value={form.address}
+                      onChange={(e) => setForm({ ...form, address: e.target.value })}
+                    />
+                  )}
                 </div>
               </div>
 
@@ -85,12 +87,21 @@ export default function PaymentModal({
 
               <hr />
 
-              {/* Taxa de entrega */}
+              {/* Entrega / Retirada */}
               <div>
-                <span>TAXA DE ENTREGA</span>
+                <span>{isPickup ? "RETIRADA NO LOCAL" : "TAXA DE ENTREGA"}</span>
                 <div className="pm-fee-display">
-                  <span className="pm-fee-neighborhood">📍 {form.neighborhood}</span>
-                  <span className="pm-fee-value">{fee > 0 ? money(fee) : "Grátis"}</span>
+                  {isPickup ? (
+                    <>
+                      <span className="pm-fee-neighborhood">🏪 Rua Gastão Mariz, 239</span>
+                      <span className="pm-fee-value" style={{ color: "#22c55e" }}>Grátis</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="pm-fee-neighborhood">📍 {form.neighborhood}</span>
+                      <span className="pm-fee-value">{fee > 0 ? money(fee) : "Grátis"}</span>
+                    </>
+                  )}
                 </div>
               </div>
 

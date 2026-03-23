@@ -37,6 +37,7 @@ export default function App() {
     pay: "Pix",
     fee: "",
     notes: "",
+    deliveryType: "delivery",
   });
   const [mobileCart, setMobileCart] = useState(false);
   const [addonModalItem, setAddonModalItem] = useState(null);
@@ -331,9 +332,13 @@ export default function App() {
 
     const lines = [`*${CONFIG.storeName}*`, ""];
     if (form.name) lines.push(`👤 ${form.name}`);
-    if (form.address) lines.push(`📍 ${form.address}`);
+    if (form.deliveryType === "pickup") {
+      lines.push(`🏪 Retirada no local`);
+    } else {
+      if (form.address) lines.push(`📍 ${form.address}`);
+      if (fee > 0) lines.push(`🚚 Entrega: ${money(fee)}`);
+    }
     lines.push(`💳 ${form.pay}`);
-    if (fee > 0) lines.push(`🚚 Entrega: ${money(fee)}`);
     lines.push("", "🧾 *Itens:*");
     cart.forEach((i) => {
       const basePrice = i.price || 0;

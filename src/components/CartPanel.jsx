@@ -107,27 +107,50 @@ export default function CartPanel({ cart, form, setForm, onInc, onDec, onClear, 
         <div className="cart-card checkout-card">
           <label className="cart-card-title">Resumo</label>
 
-          {/* Bairro */}
-          <div className="cart-neighborhood">
-            <label className={`cart-field-label${neighborhoodError ? " cart-field-error" : ""}`}>
-              Bairro / Entrega
-              {neighborhoodError && (
-                <span className="cart-error-asterisk">*</span>
-              )}
-            </label>
-            <select
-              value={form.neighborhood || ""}
-              onChange={(e) => handleNeighborhoodChange(e.target.value)}
-              className={`cart-select${neighborhoodError ? " cart-select-error" : ""}`}
+          {/* Toggle Entrega / Retirada */}
+          <div className="cart-delivery-toggle">
+            <button
+              className={`cart-toggle-btn${form.deliveryType !== "pickup" ? " active" : ""}`}
+              onClick={() => setForm({ ...form, deliveryType: "delivery", neighborhood: "", fee: "" })}
             >
-              <option value="">Escolha um bairro...</option>
-              {neighborhoods.map((n) => (
-                <option key={n} value={n}>
-                  {n} — R$ {getDeliveryRate(n).toFixed(2)}
-                </option>
-              ))}
-            </select>
+              🛵 Entrega
+            </button>
+            <button
+              className={`cart-toggle-btn${form.deliveryType === "pickup" ? " active" : ""}`}
+              onClick={() => setForm({ ...form, deliveryType: "pickup", neighborhood: "", fee: "0" })}
+            >
+              🏪 Retirada
+            </button>
           </div>
+
+          {/* Bairro (só para entrega) */}
+          {form.deliveryType !== "pickup" && (
+            <div className="cart-neighborhood">
+              <label className={`cart-field-label${neighborhoodError ? " cart-field-error" : ""}`}>
+                Bairro / Entrega
+                {neighborhoodError && <span className="cart-error-asterisk">*</span>}
+              </label>
+              <select
+                value={form.neighborhood || ""}
+                onChange={(e) => handleNeighborhoodChange(e.target.value)}
+                className={`cart-select${neighborhoodError ? " cart-select-error" : ""}`}
+              >
+                <option value="">Escolha um bairro...</option>
+                {neighborhoods.map((n) => (
+                  <option key={n} value={n}>
+                    {n} — R$ {getDeliveryRate(n).toFixed(2)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {form.deliveryType === "pickup" && (
+            <div className="cart-pickup-info">
+              <span>📍</span>
+              <span>Rua Gastão Mariz, 239 — Retirada grátis</span>
+            </div>
+          )}
 
           {/* Detalhes */}
           <div className="cart-details-grid">
@@ -144,7 +167,7 @@ export default function CartPanel({ cart, form, setForm, onInc, onDec, onClear, 
               <button
                 className="checkout-btn"
                 onClick={() => {
-                  if (!form.neighborhood) {
+                  if (form.deliveryType !== "pickup" && !form.neighborhood) {
                     setNeighborhoodError(true);
                     return;
                   }
