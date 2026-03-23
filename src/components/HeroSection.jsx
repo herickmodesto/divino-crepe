@@ -151,9 +151,27 @@ export default function HeroSection({ onOrderClick, onPromoAdd }) {
       <div className="promo-section">
         <div className="hero-container">
           <div className="promo-header">
-            <div className="promo-label fade-up">🍕✨ BOA NOITE! JÁ ESCOLHEU SEU PEDIDO? 😍✨</div>
-            <h2 className="promo-title fade-up-delay-1">🔥 PROMOÇÕES IMPERDÍVEIS 🔥</h2>
-            <p className="promo-subtitle fade-up-delay-2">{promoMessage}</p>
+            <div className="promo-label fade-up">⚡ OFERTAS ESPECIAIS · TEMPO LIMITADO ⚡</div>
+            <h2 className="promo-title fade-up-delay-1">
+              <span className="fire-wrap">
+                <div className="fire">
+                  <div className="fire-left"><div className="main-fire"/><div className="particle-fire"/></div>
+                  <div className="fire-center"><div className="main-fire"/><div className="particle-fire"/></div>
+                  <div className="fire-right"><div className="main-fire"/><div className="particle-fire"/></div>
+                  <div className="fire-bottom"><div className="main-fire"/></div>
+                </div>
+              </span>
+              PROMOÇÕES IMPERDÍVEIS
+              <span className="fire-wrap">
+                <div className="fire">
+                  <div className="fire-left"><div className="main-fire"/><div className="particle-fire"/></div>
+                  <div className="fire-center"><div className="main-fire"/><div className="particle-fire"/></div>
+                  <div className="fire-right"><div className="main-fire"/><div className="particle-fire"/></div>
+                  <div className="fire-bottom"><div className="main-fire"/></div>
+                </div>
+              </span>
+            </h2>
+            <p className="promo-subtitle fade-up-delay-2"><strong>{promoMessage}</strong></p>
           </div>
 
           <div className="promo-grid fade-up-delay-2">
