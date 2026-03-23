@@ -1,0 +1,298 @@
+/* ══════════════════ PAYMENT MODAL ══════════════════ */
+.payment-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* ── Container (single modal card) ── */
+.pm-container {
+  background: #111114;
+  border: 1px solid hsla(240, 5%, 65%, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: var(--font, sans-serif);
+  overflow: hidden;
+}
+
+/* ── Cart card (scrollable form area) ── */
+.pm-card.pm-cart {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(240 3.7% 20%) transparent;
+}
+
+.pm-card.pm-cart::-webkit-scrollbar {
+  width: 4px;
+}
+.pm-card.pm-cart::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pm-card.pm-cart::-webkit-scrollbar-thumb {
+  background: hsl(240 3.7% 20%);
+  border-radius: 4px;
+}
+
+/* Title */
+.pm-title {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: hsl(240 5% 64.9%);
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+/* Steps wrapper */
+.pm-steps {
+  display: flex;
+  flex-direction: column;
+}
+
+.pm-step {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Section labels inside steps */
+.pm-step > div > span:first-child {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: hsl(240 5% 55%);
+  margin-bottom: 8px;
+}
+
+/* Order items */
+.pm-step > div > p {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  color: hsl(240 5% 80%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Dividers */
+.pm-step hr {
+  border: none;
+  border-top: 1px solid hsl(240 3.7% 16%);
+  margin: 4px 0;
+}
+
+/* Field group */
+.pm-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Inputs / Select / Textarea */
+.pm-input-field {
+  width: 100%;
+  background: transparent;
+  border: 1px solid hsl(240 3.7% 18%);
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: hsl(240 5% 80%);
+  font-size: 0.82rem;
+  font-family: var(--font, sans-serif);
+  outline: none;
+  transition: border-color 200ms, box-shadow 200ms;
+  box-sizing: border-box;
+}
+
+.pm-input-field::placeholder {
+  color: hsl(240 5% 42%);
+}
+
+.pm-input-field:focus {
+  border-color: hsla(240, 5%, 65%, 0.4);
+  box-shadow: 0 0 0 3px rgba(100, 160, 220, 0.08);
+}
+
+select.pm-input-field {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+select.pm-input-field option {
+  background: #1a1a1f;
+  color: hsl(240 5% 80%);
+}
+
+.pm-textarea-field {
+  min-height: 64px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* Taxa de entrega (read-only) */
+.pm-fee-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: hsl(240 3.7% 14%);
+  border: 1px solid hsl(240 3.7% 18%);
+  border-radius: 6px;
+  padding: 9px 12px;
+}
+
+.pm-fee-neighborhood {
+  font-size: 0.82rem;
+  color: hsl(240 5% 70%);
+}
+
+.pm-fee-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f9f9f9;
+}
+
+/* Resumo / Payments section */
+.pm-payments {
+  padding-bottom: 8px;
+}
+
+.pm-details {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 5px;
+  column-gap: 12px;
+  font-size: 0.82rem;
+  color: hsl(240 5% 65%);
+  margin-top: 6px;
+}
+
+.pm-details span:nth-child(even) {
+  text-align: right;
+  color: hsl(240 5% 82%);
+  font-weight: 600;
+}
+
+/* ── Checkout card (sticky footer) ── */
+.pm-card.pm-checkout {
+  flex-shrink: 0;
+  padding: 14px 24px 20px;
+  border-top: 1px solid hsl(240 3.7% 16%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pm-close-btn {
+  background: transparent;
+  border: 1px solid hsl(240 3.7% 18%);
+  color: hsl(240 5% 55%);
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 200ms, color 200ms;
+  font-family: var(--font, sans-serif);
+}
+
+.pm-close-btn:hover {
+  background: hsl(240 3.7% 16%);
+  color: hsl(240 5% 75%);
+}
+
+.pm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pm-price {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #f9f9f9;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+}
+
+.pm-confirm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #25d366;
+  color: #fff;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 200ms, transform 100ms;
+  font-family: var(--font, sans-serif);
+  flex: 1;
+  white-space: nowrap;
+}
+
+.pm-confirm-btn:hover {
+  background: #1db954;
+}
+
+.pm-confirm-btn:active {
+  transform: scale(0.97);
+  background: #17a348;
+}
+
+.pm-confirm-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .pm-container {
+    max-height: 95vh;
+    border-radius: 14px;
+  }
+  .pm-card.pm-cart {
+    padding: 18px 16px 0;
+  }
+  .pm-card.pm-checkout {
+    padding: 12px 16px 16px;
+  }
+  .pm-price {
+    font-size: 1.15rem;
+  }
+  .pm-confirm-btn {
+    font-size: 0.8rem;
+    padding: 10px 14px;
+  }
+}
