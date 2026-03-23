@@ -220,9 +220,6 @@ export default function HeroSection({ onOrderClick, onPromoAdd }) {
             ))}
           </div>
 
-          <div className="promo-footer fade-up-delay-3">
-            <p>💬 Já manda seu pedido que a gente prepara com capricho! 😋🔥</p>
-          </div>
         </div>
       </div>
     </section>
