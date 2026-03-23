@@ -44,7 +44,7 @@ export default function HeroSection({ onOrderClick, onPromoAdd }) {
       { name: "Portuguesa", emoji: "🥚" },
       { name: "Lombo", emoji: "🥓" },
     ]},
-    { id: 5, title: "Crepe Suíço", description: "3 Crepes Suíços - Consulte sabores disponíveis", rating: 4.7, price: "12,00", image: "/images/crepes/crepechocolate.webp", itemType: "direct" },
+    { id: 5, title: "Crepe Suíço", description: "3 Crepes Suíços - Consulte sabores disponíveis", rating: 4.7, price: "15,00", image: "/images/crepes/crepechocolate.webp", itemType: "direct" },
   ];
 
   const weekendItems = [
