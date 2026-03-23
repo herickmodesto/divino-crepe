@@ -1,6 +1,39 @@
 import { useState } from "react";
-import { ADDONS, REFRIGERANTES_COMBO } from "../data/menu";
+import { ADDONS, PIZZA_SABORES, REFRIGERANTES_COMBO } from "../data/menu";
 import { money } from "../utils/helpers";
+
+function SaborSelector({ label, value, onChange }) {
+  return (
+    <>
+      <div className="am-section-header">
+        <div className="am-section-info">
+          <span className="am-section-title">{label}</span>
+          <span className="am-section-sub">Escolha 1 sabor.</span>
+        </div>
+        {value && <span className="am-section-check">✓</span>}
+      </div>
+      {PIZZA_SABORES.map((sabor) => {
+        const isSel = value?.name === sabor.name;
+        return (
+          <button
+            key={sabor.name}
+            className={`am-option-row${isSel ? " am-option-selected" : ""}`}
+            onClick={() => onChange((prev) => prev?.name === sabor.name ? null : sabor)}
+          >
+            <div className="am-option-left">
+              <span className="am-option-emoji">{sabor.emoji}</span>
+              <div className="am-option-text">
+                <span className="am-option-name">{sabor.name}</span>
+                <span className="am-option-price">Incluso no combo</span>
+              </div>
+            </div>
+            <span className={`am-radio${isSel ? " am-radio-on" : ""}`} />
+          </button>
+        );
+      })}
+    </>
+  );
+}
 
 function BorderSelector({ label, value, onChange }) {
   return (
@@ -71,7 +104,9 @@ function RefrigeranteSelector({ value, onChange }) {
 }
 
 export default function ComboModal({ item, onConfirm, onClose }) {
+  const [sabor1, setSabor1] = useState(null);
   const [borda1, setBorda1] = useState(null);
+  const [sabor2, setSabor2] = useState(null);
   const [borda2, setBorda2] = useState(null);
   const [refrigerante, setRefrigerante] = useState(null);
   const [qty, setQty] = useState(1);
@@ -82,7 +117,7 @@ export default function ComboModal({ item, onConfirm, onClose }) {
   const handleConfirm = () => {
     onConfirm({
       ...item,
-      comboAddons: { pizza1: borda1, pizza2: borda2, refrigerante },
+      comboAddons: { sabor1, borda1, sabor2, borda2, refrigerante },
       totalPrice: item.price + extra,
       qty,
     });
@@ -110,7 +145,11 @@ export default function ComboModal({ item, onConfirm, onClose }) {
           </div>
 
           <div className="am-options-scroll">
+            <SaborSelector label="Sabor Pizza 1" value={sabor1} onChange={setSabor1} />
+            <div className="combo-divider" />
             <BorderSelector label="Borda Pizza 1" value={borda1} onChange={setBorda1} />
+            <div className="combo-divider" />
+            <SaborSelector label="Sabor Pizza 2" value={sabor2} onChange={setSabor2} />
             <div className="combo-divider" />
             <BorderSelector label="Borda Pizza 2" value={borda2} onChange={setBorda2} />
             <div className="combo-divider" />

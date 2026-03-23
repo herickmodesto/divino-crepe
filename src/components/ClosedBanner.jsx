@@ -7,6 +7,19 @@ function getDayStatus() {
   if (CONFIG.closedDays && CONFIG.closedDays.includes(day)) {
     return { closed: true, reason: "Não abrimos às quartas e quintas.", next: "Voltamos na sexta-feira! 🎉" };
   }
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const openHour = CONFIG.openHour ?? 17;
+  const closeHour = CONFIG.closeHour ?? 22;
+  const closeMinute = CONFIG.closeMinute ?? 30;
+  const beforeOpen = hour < openHour;
+  const afterClose = hour > closeHour || (hour === closeHour && minute >= closeMinute);
+  if (beforeOpen) {
+    return { closed: true, reason: `Abrimos às ${String(openHour).padStart(2, "0")}:00.`, next: "Aguarde, estamos chegando! 🍕" };
+  }
+  if (afterClose) {
+    return { closed: true, reason: "Encerramos por hoje.", next: `Voltamos amanhã às ${String(openHour).padStart(2, "0")}:00! 🎉` };
+  }
   return { closed: false };
 }
 

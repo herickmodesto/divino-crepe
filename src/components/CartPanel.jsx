@@ -22,10 +22,22 @@ function CartItem({ item, onInc, onDec }) {
 
       <div className="ci-info">
         <span className="ci-name">{item.name}</span>
+        {item.comboAddons && (
+          <p className="ci-addons-text">
+            🍕 {item.comboAddons.sabor1?.name || "A escolher"} ({item.comboAddons.borda1?.name || "Sem Borda"})
+            {" · "}
+            🍕 {item.comboAddons.sabor2?.name || "A escolher"} ({item.comboAddons.borda2?.name || "Sem Borda"})
+            {item.comboAddons.refrigerante && ` · 🥤 ${item.comboAddons.refrigerante.name}`}
+          </p>
+        )}
         {item.selectedAddons && item.selectedAddons.length > 0 && (
           <p className="ci-addons-text">
             {item.selectedAddons.map((a) => a.name).join(", ")}
+            {item.saborMeio && ` · Meia ${item.saborMeio.name}`}
           </p>
+        )}
+        {!item.selectedAddons?.length && item.saborMeio && (
+          <p className="ci-addons-text">Meia {item.saborMeio.name}</p>
         )}
         {item.selectedCobertura && (
           <p className="ci-addons-text">

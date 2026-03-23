@@ -1,18 +1,31 @@
 import { useState } from "react";
+import { PIZZA_SABORES } from "../data/menu";
 import { money } from "../utils/helpers";
 
 export default function AddonsModal({ item, addons, onConfirm, onClose }) {
   const [selected, setSelected] = useState(null);
   const [selectedSabor, setSelectedSabor] = useState(null);
+  const [meioAMeio, setMeioAMeio] = useState(false);
+  const [saborMeio, setSaborMeio] = useState(null);
   const [qty, setQty] = useState(1);
 
   const selectAddon = (addon) => {
     setSelected((prev) => (prev?.name === addon.name ? null : addon));
   };
 
+  const toggleMeioAMeio = () => {
+    setMeioAMeio((prev) => {
+      if (prev) setSaborMeio(null);
+      return !prev;
+    });
+  };
+
   const addonPrice = selected?.price || 0;
-  const totalPrice = (item.price + addonPrice) * qty;
-  const canConfirm = !item.pizzaSabores || selectedSabor;
+  const effectiveBasePrice = meioAMeio && saborMeio
+    ? Math.max(item.price, saborMeio.price)
+    : item.price;
+  const totalPrice = (effectiveBasePrice + addonPrice) * qty;
+  const canConfirm = (!item.pizzaSabores || selectedSabor) && (!meioAMeio || saborMeio);
 
   const handleConfirm = () => {
     if (!canConfirm) return;
@@ -20,7 +33,9 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
       ...item,
       selectedAddons: selected ? [selected] : [],
       selectedSabor: selectedSabor || null,
-      totalPrice: item.price + addonPrice,
+      saborMeio: meioAMeio && saborMeio ? saborMeio : null,
+      effectiveBasePrice,
+      totalPrice: effectiveBasePrice + addonPrice,
       qty,
     });
   };
@@ -31,26 +46,21 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="addons-modal">
-        {/* Botão fechar flutuante */}
         <button className="am-close-btn" onClick={onClose}>×</button>
 
-        {/* Painel esquerdo: imagem */}
         {item.image && (
           <div className="am-image-panel">
             <img src={item.image} alt={item.name} />
           </div>
         )}
 
-        {/* Painel direito */}
         <div className="am-right-panel">
-          {/* Título do produto */}
           <div className="am-title-bar">
             <h2 className="am-product-name">{item.name}</h2>
             {item.desc && <p className="am-product-desc">{item.desc}</p>}
             <span className="am-base-price">{money(item.price)}</span>
           </div>
 
-          {/* Lista de opções scrollável */}
           <div className="am-options-scroll">
             {/* Borda */}
             <div className="am-section-header">
@@ -80,7 +90,7 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
               );
             })}
 
-            {/* Sabor da Pizza (apenas quando disponível) */}
+            {/* Sabor da Pizza (apenas quando disponível via promoção) */}
             {item.pizzaSabores && (
               <>
                 <div className="combo-divider" />
@@ -112,9 +122,55 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
                 })}
               </>
             )}
+
+            {/* Meio a Meio */}
+            <div className="combo-divider" />
+            <div className="am-section-header">
+              <div className="am-section-info">
+                <span className="am-section-title">Meia a Meia</span>
+                <span className="am-section-sub">
+                  {meioAMeio
+                    ? "Preço da pizza mais cara."
+                    : "Divida com outro sabor."}
+                </span>
+              </div>
+              <button
+                className={`am-toggle-btn${meioAMeio ? " am-toggle-on" : ""}`}
+                onClick={toggleMeioAMeio}
+              >
+                {meioAMeio ? "Ativado" : "Ativar"}
+              </button>
+            </div>
+
+            {meioAMeio && (
+              <>
+                {PIZZA_SABORES.filter((s) => s.name !== item.name).map((sabor) => {
+                  const isSel = saborMeio?.name === sabor.name;
+                  const precoFinal = Math.max(item.price, sabor.price);
+                  const precoLabel = precoFinal > item.price
+                    ? `Sobe para ${money(precoFinal)}`
+                    : "Mesmo preço";
+                  return (
+                    <button
+                      key={sabor.name}
+                      className={`am-option-row${isSel ? " am-option-selected" : ""}`}
+                      onClick={() => setSaborMeio((prev) => prev?.name === sabor.name ? null : sabor)}
+                    >
+                      <div className="am-option-left">
+                        <span className="am-option-emoji">{sabor.emoji}</span>
+                        <div className="am-option-text">
+                          <span className="am-option-name">{sabor.name}</span>
+                          <span className="am-option-price">{precoLabel}</span>
+                        </div>
+                      </div>
+                      <span className={`am-radio${isSel ? " am-radio-on" : ""}`} />
+                    </button>
+                  );
+                })}
+              </>
+            )}
           </div>
 
-          {/* Barra inferior */}
           <div className="am-bottom-bar">
             <div className="am-qty-selector">
               <button className="am-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty === 1}>−</button>

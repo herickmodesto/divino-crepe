@@ -23,6 +23,23 @@ export const CREPE_SABORES = [
   { name: "Frango c/ Catupiry", emoji: "🍗" },
 ];
 
+export const PIZZA_SABORES = [
+  { name: "Calabresa", price: 24.0, emoji: "🍕" },
+  { name: "Mussarela", price: 24.0, emoji: "🧀" },
+  { name: "Frango com Cheddar", price: 24.0, emoji: "🍗" },
+  { name: "Chocolate", price: 24.0, emoji: "🍫" },
+  { name: "Portuguesa", price: 28.9, emoji: "🥚" },
+  { name: "Marguerita", price: 28.9, emoji: "🍅" },
+  { name: "Sertanejo", price: 38.9, emoji: "🥩" },
+  { name: "Lombo", price: 28.9, emoji: "🥓" },
+  { name: "Frango com Catupiry", price: 28.9, emoji: "🍗" },
+  { name: "Camarão Internacional", price: 44.9, emoji: "🦐" },
+  { name: "Carne de Sol com Nata", price: 37.9, emoji: "🥩" },
+  { name: "Chocolate com Banana", price: 27.9, emoji: "🍌" },
+  { name: "Banana Nevada", price: 27.9, emoji: "🍫" },
+  { name: "Chocolate com Confete", price: 26.9, emoji: "🍬" },
+];
+
 export const REFRIGERANTES_COMBO = [
   { name: "Pepsi 1L", emoji: "🥤" },
   { name: "Guaraná 1L", emoji: "🥤" },

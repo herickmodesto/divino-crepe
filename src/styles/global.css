@@ -188,6 +188,25 @@ body {
   font-weight: 700;
 }
 
+.am-toggle-btn {
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #717171;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.am-toggle-btn.am-toggle-on {
+  background: #50a773;
+  border-color: #50a773;
+  color: #fff;
+}
+
 /* ── Linha de opção ── */
 .am-option-row {
   width: 100%;

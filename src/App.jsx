@@ -141,24 +141,26 @@ export default function App() {
         .map((a) => a.name)
         .join(", ");
       const saborStr = itemWithAddons.selectedSabor?.name || "";
-      const itemId = `${itemWithAddons.id}--${addonsStr}${saborStr ? `--${saborStr}` : ""}`;
+      const meioStr = itemWithAddons.saborMeio ? `meia-${itemWithAddons.saborMeio.name}` : "";
+      const itemId = `${itemWithAddons.id}--${addonsStr}${saborStr ? `--${saborStr}` : ""}${meioStr ? `--${meioStr}` : ""}`;
 
       setCart((prev) => {
         const existing = prev.find((x) => x.id === itemId);
         if (existing)
           return prev.map((x) =>
-            x.id === itemId ? { ...x, qty: x.qty + 1 } : x
+            x.id === itemId ? { ...x, qty: x.qty + itemWithAddons.qty } : x
           );
         return [
           ...prev,
           {
             id: itemId,
             name: itemWithAddons.name,
-            price: itemWithAddons.price,
+            price: itemWithAddons.effectiveBasePrice ?? itemWithAddons.price,
             category: itemWithAddons.category,
             selectedAddons: itemWithAddons.selectedAddons,
             selectedSabor: itemWithAddons.selectedSabor || null,
-            qty: 1,
+            saborMeio: itemWithAddons.saborMeio || null,
+            qty: itemWithAddons.qty ?? 1,
           },
         ];
       });
@@ -275,12 +277,14 @@ export default function App() {
 
   const handleComboConfirm = useCallback(
     (item) => {
-      const extra = (item.comboAddons.pizza1?.price || 0) + (item.comboAddons.pizza2?.price || 0);
+      const extra = (item.comboAddons.borda1?.price || 0) + (item.comboAddons.borda2?.price || 0);
       const totalPrice = item.price + extra;
-      const p1 = item.comboAddons.pizza1?.name || "Sem Borda";
-      const p2 = item.comboAddons.pizza2?.name || "Sem Borda";
+      const s1 = item.comboAddons.sabor1?.name || "A escolher";
+      const s2 = item.comboAddons.sabor2?.name || "A escolher";
+      const b1 = item.comboAddons.borda1?.name || "Sem Borda";
+      const b2 = item.comboAddons.borda2?.name || "Sem Borda";
       const refri = item.comboAddons.refrigerante?.name || "Sem Refrigerante";
-      const cartId = `${item.id}--${p1}--${p2}--${refri}`;
+      const cartId = `${item.id}--${s1}--${b1}--${s2}--${b2}--${refri}`;
 
       setCart((prev) => {
         const existing = prev.find((x) => x.id === cartId);
@@ -379,14 +383,19 @@ export default function App() {
       } else if (i.pasteisOptions) {
         itemLine += ` [Pastel 1: ${i.pasteisOptions.sabor1.name}, Pastel 2: ${i.pasteisOptions.sabor2.name}]`;
       } else if (i.comboAddons) {
-        const p1 = i.comboAddons.pizza1?.name || "Sem Borda";
-        const p2 = i.comboAddons.pizza2?.name || "Sem Borda";
+        const s1 = i.comboAddons.sabor1?.name || "A escolher";
+        const b1 = i.comboAddons.borda1?.name || "Sem Borda";
+        const s2 = i.comboAddons.sabor2?.name || "A escolher";
+        const b2 = i.comboAddons.borda2?.name || "Sem Borda";
         const refri = i.comboAddons.refrigerante?.name;
-        itemLine += ` [Pizza 1: ${p1}, Pizza 2: ${p2}${refri ? `, Refri: ${refri}` : ""}]`;
+        itemLine += ` [Pizza 1: ${s1} (${b1}), Pizza 2: ${s2} (${b2})${refri ? `, Refri: ${refri}` : ""}]`;
       } else if (i.selectedAddons && i.selectedAddons.length > 0) {
         const addonsList = i.selectedAddons.map((a) => a.name).join(", ");
         const saborInfo = i.selectedSabor ? `, Sabor: ${i.selectedSabor.name}` : "";
-        itemLine += ` [${addonsList}${saborInfo}]`;
+        const meioInfo = i.saborMeio ? ` (Meia ${i.saborMeio.name})` : "";
+        itemLine += ` [${addonsList}${saborInfo}${meioInfo}]`;
+      } else if (i.saborMeio) {
+        itemLine += ` [Meia ${i.saborMeio.name}]`;
       }
       itemLine += ` — ${p}`;
       lines.push(itemLine);
