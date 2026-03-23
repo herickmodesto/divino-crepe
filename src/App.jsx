@@ -22,6 +22,7 @@ import AcaiModal from "./components/AcaiModal";
 import PaymentModal from "./components/PaymentModal";
 import FavCard from "./components/FavCard";
 import ClosedBanner from "./components/ClosedBanner";
+import PasteisModal from "./components/PasteisModal";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -41,6 +42,7 @@ export default function App() {
   const [addonModalItem, setAddonModalItem] = useState(null);
   const [comboModalItem, setComboModalItem] = useState(null);
   const [acaiModalItem, setAcaiModalItem] = useState(null);
+  const [pasteisModalItem, setPasteisModalItem] = useState(null);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [currentSubtotal, setCurrentSubtotal] = useState(0);
   const toastTimer = useRef(null);
@@ -213,6 +215,8 @@ export default function App() {
         setComboModalItem(base);
       } else if (promoItem.itemType === "pizza") {
         setAddonModalItem({ ...base, addons: true });
+      } else if (promoItem.itemType === "pasteis") {
+        setPasteisModalItem(base);
       } else {
         setCart((prev) => {
           const existing = prev.find((x) => x.id === base.id);
@@ -226,13 +230,32 @@ export default function App() {
     [showToast]
   );
 
+  const handlePasteisConfirm = useCallback(
+    (item) => {
+      const s1 = item.pasteisOptions.sabor1.name;
+      const s2 = item.pasteisOptions.sabor2.name;
+      const cartId = `${item.id}--${s1}--${s2}`;
+      setCart((prev) => {
+        const existing = prev.find((x) => x.id === cartId);
+        if (existing) return prev.map((x) => x.id === cartId ? { ...x, qty: x.qty + item.qty } : x);
+        return [...prev, { id: cartId, name: item.name, price: item.price, category: item.category, pasteisOptions: item.pasteisOptions, qty: item.qty }];
+      });
+      showToast(`${item.name} adicionado`);
+      setPasteisModalItem(null);
+      setActiveSection("menu");
+      setMobileCart(true);
+    },
+    [showToast]
+  );
+
   const handleComboConfirm = useCallback(
     (item) => {
       const extra = (item.comboAddons.pizza1?.price || 0) + (item.comboAddons.pizza2?.price || 0);
       const totalPrice = item.price + extra;
       const p1 = item.comboAddons.pizza1?.name || "Sem Borda";
       const p2 = item.comboAddons.pizza2?.name || "Sem Borda";
-      const cartId = `${item.id}--${p1}--${p2}`;
+      const refri = item.comboAddons.refrigerante?.name || "Sem Refrigerante";
+      const cartId = `${item.id}--${p1}--${p2}--${refri}`;
 
       setCart((prev) => {
         const existing = prev.find((x) => x.id === cartId);
@@ -322,10 +345,13 @@ export default function App() {
           itemLine += ` + ${complementsList}`;
         }
         itemLine += `]`;
+      } else if (i.pasteisOptions) {
+        itemLine += ` [Pastel 1: ${i.pasteisOptions.sabor1.name}, Pastel 2: ${i.pasteisOptions.sabor2.name}]`;
       } else if (i.comboAddons) {
         const p1 = i.comboAddons.pizza1?.name || "Sem Borda";
         const p2 = i.comboAddons.pizza2?.name || "Sem Borda";
-        itemLine += ` [Pizza 1: ${p1}, Pizza 2: ${p2}]`;
+        const refri = i.comboAddons.refrigerante?.name;
+        itemLine += ` [Pizza 1: ${p1}, Pizza 2: ${p2}${refri ? `, Refri: ${refri}` : ""}]`;
       } else if (i.selectedAddons && i.selectedAddons.length > 0) {
         const addonsList = i.selectedAddons.map((a) => a.name).join(", ");
         itemLine += ` [${addonsList}]`;
@@ -554,6 +580,14 @@ export default function App() {
           item={comboModalItem}
           onConfirm={handleComboConfirm}
           onClose={() => setComboModalItem(null)}
+        />
+      )}
+
+      {pasteisModalItem && (
+        <PasteisModal
+          item={pasteisModalItem}
+          onConfirm={handlePasteisConfirm}
+          onClose={() => setPasteisModalItem(null)}
         />
       )}
 

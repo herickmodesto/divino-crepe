@@ -5,6 +5,19 @@ export const ADDONS = [
   { name: "Chocolate", price: 8.0, emoji: "🍫" },
 ];
 
+export const PASTEIS_SABORES = [
+  { name: "Calabresa", emoji: "🌶️" },
+  { name: "Queijo e Presunto", emoji: "🧀" },
+  { name: "Frango com Catupiry", emoji: "🍗" },
+  { name: "Queijo Coalho", emoji: "🫕" },
+];
+
+export const REFRIGERANTES_COMBO = [
+  { name: "Pepsi 1L", emoji: "🥤" },
+  { name: "Guaraná 1L", emoji: "🥤" },
+  { name: "Fanta Laranja 1L", emoji: "🍊" },
+];
+
 export const ACAI_COBERTURAS = [
   { name: "Leite condensado", emoji: "🥛" },
   { name: "Banana", emoji: "🍌" },
