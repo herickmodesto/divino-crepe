@@ -4726,9 +4726,9 @@ body {
   justify-content: space-between;
   gap: 16px;
   padding: 16px;
-  background: rgba(239, 90, 0, 0.08);
+  background: linear-gradient(135deg, rgba(77, 184, 213, 0.06), rgba(253, 216, 53, 0.04));
   border-radius: var(--radius);
-  border-left: 4px solid #ef5a00;
+  border-left: 4px solid var(--brand);
 }
 
 .promo-avatars {

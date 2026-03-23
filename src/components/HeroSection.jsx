@@ -159,14 +159,6 @@ export default function HeroSection({ onOrderClick, onPromoAdd }) {
           </a>
         </div>
 
-        <div className="hero-stats fade-up-delay-4">
-          {stats.map((stat, i) => (
-            <div key={i} className="stat-item">
-              <div className="stat-number">{stat.value}</div>
-              <div className="stat-label">{stat.label}</div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Promotional Section */}
