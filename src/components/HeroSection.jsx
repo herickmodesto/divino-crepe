@@ -36,20 +36,42 @@ export default function HeroSection({ onOrderClick, onPromoAdd }) {
   const isWeekend = getDayOfWeek() === 0 || getDayOfWeek() === 6;
 
   const weekdayItems = [
-    { id: 1, title: "Pizza Grande", description: "Calabresa, Mussarela, Marguerita, Frango com Cheddar ou Chocolate", rating: 5.0, price: "23,99", image: "/images/pizzas/calabresa.webp", itemType: "pizza" },
+    { id: 1, title: "Pizza Grande", description: "Calabresa, Mussarela, Marguerita, Frango com Cheddar ou Chocolate", rating: 5.0, price: "23,99", image: "/images/pizzas/calabresa.webp", itemType: "pizza", pizzaSabores: [
+      { name: "Calabresa", emoji: "🌶️" },
+      { name: "Mussarela", emoji: "🧀" },
+      { name: "Marguerita", emoji: "🍅" },
+      { name: "Frango com Cheddar", emoji: "🍗" },
+      { name: "Chocolate", emoji: "🍫" },
+    ]},
     { id: 2, title: "2 Pastéis Grandes", description: "Calabresa, Queijo e Presunto, Frango com Catupiry, Queijo Coalho", rating: 4.9, price: "16,99", image: "/images/pasteis/pasteis.webp", itemType: "pasteis" },
     { id: 3, title: "Combo Especial", description: "2 Pizzas Grandes + Refrigerante 1L (Pepsi, Guaraná ou Fanta)", rating: 5.0, price: "55,90", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxwaXp6YXxlbnwwfDB8fHwxNzYxMTE3ODIzfDA&ixlib=rb-4.1.0&q=80&w=1080", itemType: "combo" },
-    { id: 4, title: "Pizzas Premium", description: "Frango com Catupiry, Portuguesa ou Lombo", rating: 4.8, price: "28,99", image: "/images/pizzas/Frango_com_Catupiry.webp", itemType: "pizza" },
+    { id: 4, title: "Pizzas Premium", description: "Frango com Catupiry, Portuguesa ou Lombo", rating: 4.8, price: "28,99", image: "/images/pizzas/Frango_com_Catupiry.webp", itemType: "pizza", pizzaSabores: [
+      { name: "Frango com Catupiry", emoji: "🍗" },
+      { name: "Portuguesa", emoji: "🥚" },
+      { name: "Lombo", emoji: "🥓" },
+    ]},
     { id: 5, title: "Crepe Suíço", description: "3 Crepes Suíços - Consulte sabores disponíveis", rating: 4.7, price: "12,00", image: "/images/crepes/crepechocolate.webp", itemType: "direct" },
   ];
 
   const weekendItems = [
-    { id: 1, title: "Pizza Grande", description: "Calabresa, Mussarela, Marguerita, Frango com Cheddar ou Chocolate", rating: 5.0, price: "25,99", image: "/images/pizzas/calabresa.webp", itemType: "pizza" },
+    { id: 1, title: "Pizza Grande", description: "Calabresa, Mussarela, Marguerita, Frango com Cheddar ou Chocolate", rating: 5.0, price: "25,99", image: "/images/pizzas/calabresa.webp", itemType: "pizza", pizzaSabores: [
+      { name: "Calabresa", emoji: "🌶️" },
+      { name: "Mussarela", emoji: "🧀" },
+      { name: "Marguerita", emoji: "🍅" },
+      { name: "Frango com Cheddar", emoji: "🍗" },
+      { name: "Chocolate", emoji: "🍫" },
+    ]},
     { id: 2, title: "2 Pastéis Grandes", description: "Calabresa, Queijo e Presunto, Frango com Catupiry, Queijo Coalho", rating: 4.9, price: "16,99", image: "/images/pasteis/pasteis.webp", itemType: "pasteis" },
     { id: 3, title: "Combo Especial", description: "2 Pizzas Grandes + Refrigerante 1L (Pepsi, Guaraná ou Fanta)", rating: 5.0, price: "59,90", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxwaXp6YXxlbnwwfDB8fHwxNzYxMTE3ODIzfDA&ixlib=rb-4.1.0&q=80&w=1080", itemType: "combo" },
-    { id: 4, title: "Pizzas Premium", description: "Frango com Catupiry, Portuguesa ou Lombo", rating: 4.8, price: "28,99", image: "/images/pizzas/Frango_com_Catupiry.webp", itemType: "pizza" },
+    { id: 4, title: "Pizzas Premium", description: "Frango com Catupiry, Portuguesa ou Lombo", rating: 4.8, price: "28,99", image: "/images/pizzas/Frango_com_Catupiry.webp", itemType: "pizza", pizzaSabores: [
+      { name: "Frango com Catupiry", emoji: "🍗" },
+      { name: "Portuguesa", emoji: "🥚" },
+      { name: "Lombo", emoji: "🥓" },
+    ]},
     { id: 5, title: "Crepe Suíço", description: "3 Crepes Suíços - Consulte sabores disponíveis", rating: 4.7, price: "15,00", image: "/images/crepes/crepechocolate.webp", itemType: "direct" },
   ];
+
+
 
   const promotionalItems = isWeekend ? weekendItems : weekdayItems;
   const promoMessage = isWeekend ? "Promoções válidas de sábado a domingo 🤗" : "Promoções válidas de segunda a sexta-feira 🤗";

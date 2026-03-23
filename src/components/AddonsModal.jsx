@@ -3,6 +3,7 @@ import { money } from "../utils/helpers";
 
 export default function AddonsModal({ item, addons, onConfirm, onClose }) {
   const [selected, setSelected] = useState(null);
+  const [selectedSabor, setSelectedSabor] = useState(null);
   const [qty, setQty] = useState(1);
 
   const selectAddon = (addon) => {
@@ -11,11 +12,14 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
 
   const addonPrice = selected?.price || 0;
   const totalPrice = (item.price + addonPrice) * qty;
+  const canConfirm = !item.pizzaSabores || selectedSabor;
 
   const handleConfirm = () => {
+    if (!canConfirm) return;
     onConfirm({
       ...item,
       selectedAddons: selected ? [selected] : [],
+      selectedSabor: selectedSabor || null,
       totalPrice: item.price + addonPrice,
       qty,
     });
@@ -48,18 +52,14 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
 
           {/* Lista de opções scrollável */}
           <div className="am-options-scroll">
-            {/* Cabeçalho da seção */}
+            {/* Borda */}
             <div className="am-section-header">
               <div className="am-section-info">
                 <span className="am-section-title">Borda</span>
                 <span className="am-section-sub">Escolha 1 opção.</span>
               </div>
-              {selected && (
-                <span className="am-section-check">✓</span>
-              )}
+              {selected && <span className="am-section-check">✓</span>}
             </div>
-
-            {/* Opções */}
             {addons.map((addon) => {
               const isSelected = selected?.name === addon.name;
               return (
@@ -79,27 +79,54 @@ export default function AddonsModal({ item, addons, onConfirm, onClose }) {
                 </button>
               );
             })}
+
+            {/* Sabor da Pizza (apenas quando disponível) */}
+            {item.pizzaSabores && (
+              <>
+                <div className="combo-divider" />
+                <div className="am-section-header">
+                  <div className="am-section-info">
+                    <span className="am-section-title">Sabor da Pizza</span>
+                    <span className="am-section-sub">Escolha 1 sabor.</span>
+                  </div>
+                  {selectedSabor && <span className="am-section-check">✓</span>}
+                </div>
+                {item.pizzaSabores.map((sabor) => {
+                  const isSel = selectedSabor?.name === sabor.name;
+                  return (
+                    <button
+                      key={sabor.name}
+                      className={`am-option-row${isSel ? " am-option-selected" : ""}`}
+                      onClick={() => setSelectedSabor((prev) => prev?.name === sabor.name ? null : sabor)}
+                    >
+                      <div className="am-option-left">
+                        <span className="am-option-emoji">{sabor.emoji}</span>
+                        <div className="am-option-text">
+                          <span className="am-option-name">{sabor.name}</span>
+                          <span className="am-option-price">Incluso</span>
+                        </div>
+                      </div>
+                      <span className={`am-radio${isSel ? " am-radio-on" : ""}`} />
+                    </button>
+                  );
+                })}
+              </>
+            )}
           </div>
 
           {/* Barra inferior */}
           <div className="am-bottom-bar">
             <div className="am-qty-selector">
-              <button
-                className="am-qty-btn"
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                disabled={qty === 1}
-              >
-                −
-              </button>
+              <button className="am-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty === 1}>−</button>
               <span className="am-qty-val">{qty}</span>
-              <button
-                className="am-qty-btn"
-                onClick={() => setQty((q) => q + 1)}
-              >
-                +
-              </button>
+              <button className="am-qty-btn" onClick={() => setQty((q) => q + 1)}>+</button>
             </div>
-            <button className="am-add-btn" onClick={handleConfirm}>
+            <button
+              className="am-add-btn"
+              onClick={handleConfirm}
+              disabled={!canConfirm}
+              style={{ opacity: canConfirm ? 1 : 0.5 }}
+            >
               Adicionar · {money(totalPrice)}
             </button>
           </div>
