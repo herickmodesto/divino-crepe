@@ -1379,7 +1379,7 @@ body {
   border-radius: 14px;
   padding: 12px 20px;
   font-size: 14px; font-weight: 600;
-  color: var(--text);
+  color: #fff;
   box-shadow: 0 12px 40px rgba(0,0,0,0.5);
   backdrop-filter: blur(10px);
   animation: toastIn 0.3s ease, toastOut 0.3s ease 1.2s forwards;
