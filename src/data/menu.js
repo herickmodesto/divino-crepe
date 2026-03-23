@@ -12,6 +12,17 @@ export const PASTEIS_SABORES = [
   { name: "Queijo Coalho", emoji: "🫕" },
 ];
 
+export const CREPE_SABORES = [
+  { name: "Batom (doce)", emoji: "🍬" },
+  { name: "Nutella (doce)", emoji: "🌰" },
+  { name: "Romeu e Julieta (doce)", emoji: "🧀" },
+  { name: "Queijo e Calabresa", emoji: "🌶️" },
+  { name: "Queijo e Presunto", emoji: "🥓" },
+  { name: "Queijo", emoji: "🧀" },
+  { name: "Carne de Sol com Nata", emoji: "🥩" },
+  { name: "Frango c/ Catupiry", emoji: "🍗" },
+];
+
 export const REFRIGERANTES_COMBO = [
   { name: "Pepsi 1L", emoji: "🥤" },
   { name: "Guaraná 1L", emoji: "🥤" },

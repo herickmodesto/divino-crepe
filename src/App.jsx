@@ -23,6 +23,7 @@ import PaymentModal from "./components/PaymentModal";
 import FavCard from "./components/FavCard";
 import ClosedBanner from "./components/ClosedBanner";
 import PasteisModal from "./components/PasteisModal";
+import CrepeModal from "./components/CrepeModal";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -44,6 +45,7 @@ export default function App() {
   const [comboModalItem, setComboModalItem] = useState(null);
   const [acaiModalItem, setAcaiModalItem] = useState(null);
   const [pasteisModalItem, setPasteisModalItem] = useState(null);
+  const [crepeModalItem, setCrepeModalItem] = useState(null);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [currentSubtotal, setCurrentSubtotal] = useState(0);
   const toastTimer = useRef(null);
@@ -219,6 +221,8 @@ export default function App() {
         setComboModalItem(base);
       } else if (promoItem.itemType === "pizza") {
         setAddonModalItem({ ...base, addons: true });
+      } else if (promoItem.itemType === "crepe") {
+        setCrepeModalItem(base);
       } else if (promoItem.itemType === "pasteis") {
         setPasteisModalItem(base);
       } else {
@@ -230,6 +234,23 @@ export default function App() {
         showToast(`${base.name} adicionado`);
         setActiveSection("menu");
       }
+    },
+    [showToast]
+  );
+
+  const handleCrepeConfirm = useCallback(
+    (item) => {
+      const { crepe1, crepe2, crepe3 } = item.crepeOptions;
+      const cartId = `${item.id}--${crepe1.name}--${crepe2.name}--${crepe3.name}`;
+      setCart((prev) => {
+        const existing = prev.find((x) => x.id === cartId);
+        if (existing) return prev.map((x) => x.id === cartId ? { ...x, qty: x.qty + item.qty } : x);
+        return [...prev, { id: cartId, name: item.name, price: item.price, category: item.category, crepeOptions: item.crepeOptions, qty: item.qty }];
+      });
+      showToast(`${item.name} adicionado`);
+      setCrepeModalItem(null);
+      setActiveSection("menu");
+      setMobileCart(true);
     },
     [showToast]
   );
@@ -353,6 +374,8 @@ export default function App() {
           itemLine += ` + ${complementsList}`;
         }
         itemLine += `]`;
+      } else if (i.crepeOptions) {
+        itemLine += ` [Crepe 1: ${i.crepeOptions.crepe1.name}, Crepe 2: ${i.crepeOptions.crepe2.name}, Crepe 3: ${i.crepeOptions.crepe3.name}]`;
       } else if (i.pasteisOptions) {
         itemLine += ` [Pastel 1: ${i.pasteisOptions.sabor1.name}, Pastel 2: ${i.pasteisOptions.sabor2.name}]`;
       } else if (i.comboAddons) {
@@ -589,6 +612,14 @@ export default function App() {
           item={comboModalItem}
           onConfirm={handleComboConfirm}
           onClose={() => setComboModalItem(null)}
+        />
+      )}
+
+      {crepeModalItem && (
+        <CrepeModal
+          item={crepeModalItem}
+          onConfirm={handleCrepeConfirm}
+          onClose={() => setCrepeModalItem(null)}
         />
       )}
 
