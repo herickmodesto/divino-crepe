@@ -3,6 +3,7 @@ import "./styles/global.css";
 import "./styles/navbar.css";
 import "./styles/payment-modal.css";
 import "./styles/shopping-cart.css";
+import "./styles/planos.css";
 
 import { CONFIG } from "./data/config";
 import { ALL_ITEMS, ADDONS } from "./data/menu";
@@ -24,6 +25,7 @@ import FavCard from "./components/FavCard";
 import ClosedBanner from "./components/ClosedBanner";
 import PasteisModal from "./components/PasteisModal";
 import CrepeModal from "./components/CrepeModal";
+import PlanosSection from "./components/PlanosSection";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -569,6 +571,8 @@ export default function App() {
           </div>
         </>
       )}
+
+      {activeSection === "planos" && <PlanosSection onOrderClick={() => setActiveSection("menu")} />}
 
       {activeSection === "about" && <AboutUs />}
 
