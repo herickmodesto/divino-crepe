@@ -4,7 +4,7 @@ export const CONFIG = {
   closedDays: [3, 4], // 0=Dom, 1=Seg, 2=Ter, 3=Qua, 4=Qui, 5=Sex, 6=Sáb
   address: "Rua Gastão Mariz, 239",
   instagram: "@divino._.crepe",
-  promoNote: "Promoção de pizzas por R$ 24,00 (seg–sex). Sáb e dom: R$ 25,90.",
+  promoNote: "Promoção de pizzas por R$ 24,00 (seg–sex): Calabresa, Mussarela, Frango c/ Cheddar, Chocolate e Marguerita. Sáb e dom: R$ 25,90.",
   hours: "17:00 – 22:30",
   openHour: 17,
   closeHour: 22,

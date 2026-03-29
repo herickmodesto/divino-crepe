@@ -28,8 +28,11 @@ export const PIZZA_SABORES = [
   { name: "Mussarela", price: 24.0, emoji: "🧀" },
   { name: "Frango com Cheddar", price: 24.0, emoji: "🍗" },
   { name: "Chocolate", price: 24.0, emoji: "🍫" },
-  { name: "Marguerita", price: 28.9, emoji: "🍅" },
+  { name: "Marguerita", price: 24.0, emoji: "🍅" },
   { name: "Frango com Catupiry", price: 28.9, emoji: "🍗" },
+  { name: "Chocolate com Banana", price: 27.9, emoji: "🍌" },
+  { name: "Banana Nevada", price: 27.9, emoji: "🍫" },
+  { name: "Chocolate com Confete", price: 26.9, emoji: "🍬" },
 ];
 
 export const REFRIGERANTES_COMBO = [
@@ -63,7 +66,7 @@ export const MENU = {
     { name: "Frango com Cheddar", price: 24.0, desc: "Molho, frango, mussarela, cheddar e orégano.", emoji: "🍗", image: "/images/pizzas/sheddar.webp", addons: true },
     { name: "Chocolate", price: 24.0, desc: "Creme de leite e chocolate.", emoji: "🍫", image: "/images/pizzas/chocolate.webp", addons: true },
     { name: "Portuguesa", price: 28.9, desc: "Molho, mussarela, presunto de peru, ovo cozido, ervilha, cebola e orégano.", emoji: "🥚", image: "/images/pizzas/portuguesa.webp", addons: true },
-    { name: "Marguerita", price: 28.9, desc: "Molho, mussarela, tomate, manjericão e orégano.", emoji: "🍅", image: "/images/pizzas/marguerita.webp", addons: true },
+    { name: "Marguerita", price: 24.0, desc: "Molho, mussarela, tomate, manjericão e orégano.", emoji: "🍅", image: "/images/pizzas/marguerita.webp", addons: true },
     { name: "Sertanejo", price: 38.9, desc: "Molho, mussarela, carne de sol, queijo coalho, cebola e orégano.", emoji: "🥩", image: "/images/pizzas/sertanejo.webp", addons: true },
   ],
   "Pizzas Premium": [
@@ -73,9 +76,9 @@ export const MENU = {
     { name: "Carne de Sol com Nata", price: 37.9, desc: "Molho, mussarela, carne de sol com nata e orégano.", emoji: "🥩", image: "/images/pizzas/Carne_de_Sol_com_Nata.webp", addons: true },
   ],
   "Doces Premium": [
-    { name: "Chocolate com Banana", price: 27.9, desc: "Creme de leite, banana, mussarela e chocolate ao leite.", emoji: "🍌", image: "/images/pizzas/Chocolate_com_Banana.webp" },
-    { name: "Banana Nevada", price: 27.9, desc: "Creme de leite, banana, mussarela e chocolate branco.", emoji: "🍫", image: "/images/pizzas/Banana_Nevada.webp" },
-    { name: "Chocolate com Confete", price: 26.9, desc: "Creme de leite, mussarela, chocolate e confete.", emoji: "🍬", image: "/images/pizzas/Chocolate_com_Confete.webp" },
+    { name: "Chocolate com Banana", price: 27.9, desc: "Creme de leite, banana, mussarela e chocolate ao leite.", emoji: "🍌", image: "/images/pizzas/Chocolate_com_Banana.webp", addons: true },
+    { name: "Banana Nevada", price: 27.9, desc: "Creme de leite, banana, mussarela e chocolate branco.", emoji: "🍫", image: "/images/pizzas/Banana_Nevada.webp", addons: true },
+    { name: "Chocolate com Confete", price: 26.9, desc: "Creme de leite, mussarela, chocolate e confete.", emoji: "🍬", image: "/images/pizzas/Chocolate_com_Confete.webp", addons: true },
   ],
   "Crepe Suíço": [
     { name: "Batom (doce)", price: 6.0, desc: "", emoji: "🍬", image: "/images/crepes/crepe.webp" },
