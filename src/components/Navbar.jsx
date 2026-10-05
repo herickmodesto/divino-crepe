@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { CONFIG } from "../data/config";
 
 function isStoreOpen() {
@@ -12,8 +12,11 @@ function isStoreOpen() {
   return cur >= total(openH, openM) && cur < total(closeH, closeM);
 }
 
-export default function Navbar({ activeSection, setActiveSection, cartCount, favorites = [] }) {
+export default function Navbar({ activeSection, setActiveSection }) {
   const [hoveredNav, setHoveredNav] = useState(null);
+  const hoverTimer = useRef(null);
+  useEffect(() => () => clearTimeout(hoverTimer.current), []);
+  const storeOpen = isStoreOpen();
 
   const navItems = [
     {
@@ -66,7 +69,8 @@ export default function Navbar({ activeSection, setActiveSection, cartCount, fav
   const handleNavChange = (sectionId) => {
     setActiveSection(sectionId);
     setHoveredNav(sectionId);
-    setTimeout(() => setHoveredNav(null), 2000);
+    clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => setHoveredNav(null), 2000);
   };
 
   return (
@@ -79,9 +83,9 @@ export default function Navbar({ activeSection, setActiveSection, cartCount, fav
           </div>
           <div className="navbar-brand-text">
             <img src="/images/nome.png" alt={CONFIG.storeName} className="navbar-store-logo" />
-            <small className={`navbar-status-text${isStoreOpen() ? " open" : ""}`}>
-              <span className={`navbar-status-dot${isStoreOpen() ? "" : " closed"}`} />
-              {isStoreOpen() ? "Aberto agora" : "Fechado"}
+            <small className={`navbar-status-text${storeOpen ? " open" : ""}`}>
+              <span className={`navbar-status-dot${storeOpen ? "" : " closed"}`} />
+              {storeOpen ? "Aberto agora" : "Fechado"}
               <span className="navbar-status-hours">· {CONFIG.hours}</span>
             </small>
           </div>
@@ -97,6 +101,7 @@ export default function Navbar({ activeSection, setActiveSection, cartCount, fav
               onMouseEnter={() => setHoveredNav(item.id)}
               onMouseLeave={() => setHoveredNav(null)}
               title={item.name}
+              aria-current={activeSection === item.id ? "page" : undefined}
             >
               <span className="nav-icon-wrapper">
                 {item.icon}
@@ -114,6 +119,7 @@ export default function Navbar({ activeSection, setActiveSection, cartCount, fav
             className="whatsapp-btn"
             target="_blank"
             rel="noreferrer"
+            aria-label="Abrir WhatsApp da Divino Crepe"
           >
             <div className="wa-sign">
               <svg className="wa-svg" viewBox="0 0 16 16">
@@ -125,8 +131,9 @@ export default function Navbar({ activeSection, setActiveSection, cartCount, fav
 
           <button
             className="Btn"
-            onClick={() => window.open(`https://instagram.com/${CONFIG.instagram.replace("@", "")}`, "_blank")}
+            onClick={() => window.open(`https://instagram.com/${CONFIG.instagram.replace("@", "")}`, "_blank", "noopener,noreferrer")}
             title="Seguir no Instagram"
+            aria-label="Seguir no Instagram"
           >
             <span className="svgContainer">
               <svg fill="white" className="svgIcon" viewBox="0 0 448 512" height="1.5em" xmlns="http://www.w3.org/2000/svg">

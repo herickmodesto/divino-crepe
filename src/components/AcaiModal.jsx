@@ -7,7 +7,7 @@ export default function AcaiModal({ item, onConfirm, onClose }) {
   const [selectedComplementos, setSelectedComplementos] = useState([]);
 
   // Número de complementos inclusos no preço
-  const includedComplements = item.includedComplements || 3;
+  const includedComplements = item.includedComplements ?? 3;
   
   // Preço extra por complemento adicional
   const COMPLEMENT_EXTRA_PRICE = 2.0;
@@ -41,7 +41,7 @@ export default function AcaiModal({ item, onConfirm, onClose }) {
       ...item,
       selectedCobertura,
       selectedComplementos,
-      complementsExtra: selectedComplementos.length - includedComplements,
+      complementsExtra: Math.max(0, selectedComplementos.length - includedComplements),
       extraPrice: totalExtraPrice,
       totalPrice,
     });

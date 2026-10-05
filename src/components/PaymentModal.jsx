@@ -1,5 +1,6 @@
 import { WhatsAppIcon } from "./Icons";
 import { money } from "../utils/helpers";
+import { getDeliveryFee, getItemTotal } from "../utils/cart";
 
 export default function PaymentModal({
   cart,
@@ -9,14 +10,14 @@ export default function PaymentModal({
   onClose,
   subtotal,
 }) {
-  const fee = parseFloat((form.fee || "0").replace(",", ".")) || 0;
+  const fee = getDeliveryFee(form);
   const total = subtotal + fee;
 
   const isPickup = form.deliveryType === "pickup";
 
   const handleConfirm = () => {
-    if (!form.name) { alert("Por favor, preencha seu Nome!"); return; }
-    if (!isPickup && !form.address) { alert("Por favor, preencha o Endereço de entrega!"); return; }
+    if (!form.name.trim()) { alert("Por favor, preencha seu Nome!"); return; }
+    if (!isPickup && !form.address.trim()) { alert("Por favor, preencha o Endereço de entrega!"); return; }
     onConfirm();
   };
 
@@ -38,7 +39,7 @@ export default function PaymentModal({
                   <p key={item.id}>
                     {item.qty}x {item.name}
                     <strong style={{ float: "right", color: "#fff" }}>
-                      {item.price != null ? money(item.price * item.qty) : "—"}
+                      {item.price != null ? money(getItemTotal(item)) : "—"}
                     </strong>
                   </p>
                 ))}
@@ -53,6 +54,8 @@ export default function PaymentModal({
                   <input
                     className="pm-input-field"
                     type="text"
+                    autoComplete="name"
+                    aria-label="Nome completo"
                     placeholder="Nome completo"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -61,6 +64,8 @@ export default function PaymentModal({
                     <input
                       className="pm-input-field"
                       type="text"
+                      autoComplete="street-address"
+                      aria-label="Endereço de entrega"
                       placeholder="Endereço de entrega"
                       value={form.address}
                       onChange={(e) => setForm({ ...form, address: e.target.value })}

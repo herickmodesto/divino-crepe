@@ -30,7 +30,7 @@ export default function ItemCard({ item, onAdd, onFavorite, isFavorited }) {
 
       {item.image ? (
         <div className="item-image-container">
-          <img src={item.image} alt={item.name} className="item-image" />
+          <img src={item.image} alt={item.name} className="item-image" loading="lazy" decoding="async" />
         </div>
       ) : (
         <div className="item-emoji">{item.emoji || "🍽️"}</div>
@@ -69,7 +69,7 @@ export default function ItemCard({ item, onAdd, onFavorite, isFavorited }) {
             isFavorited={isFavorited}
             onToggle={onFavorite}
           />
-          <button className="add-btn" title="Adicionar" onClick={() => onAdd(item)}>
+          <button className="add-btn" title="Adicionar" aria-label={`Adicionar ${item.name} ao carrinho`} onClick={() => onAdd(item)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="44"

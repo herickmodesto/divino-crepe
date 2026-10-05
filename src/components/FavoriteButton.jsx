@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useId } from "react";
 
 export default function FavoriteButton({ itemId, isFavorited, onToggle }) {
-  const [isFav, setIsFav] = useState(isFavorited || false);
-  const uid = `favorite-${itemId}`;
+  const uid = useId();
 
   const handleToggle = () => {
-    const next = !isFav;
-    setIsFav(next);
+    const next = !isFavorited;
     if (onToggle) onToggle(itemId, next);
   };
 
@@ -14,7 +12,8 @@ export default function FavoriteButton({ itemId, isFavorited, onToggle }) {
     <div className="fav-btn-wrapper">
       <input
         type="checkbox"
-        checked={isFav}
+        checked={Boolean(isFavorited)}
+        aria-label="Favoritar item"
         onChange={handleToggle}
         id={uid}
         className="fav-btn-input"

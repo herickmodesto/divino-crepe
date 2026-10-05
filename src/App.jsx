@@ -8,6 +8,12 @@ import "./styles/planos.css";
 import { CONFIG } from "./data/config";
 import { ALL_ITEMS, ADDONS } from "./data/menu";
 import { money } from "./utils/helpers";
+import { getSubtotal, getDeliveryFee, getUnitPrice, getPizzaDescription } from "./utils/cart";
+
+const normalizeSearch = (value) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const searchIndex = new Map(ALL_ITEMS.map((item) => [
+  item.id, normalizeSearch(`${item.name} ${item.desc || ""} ${item.category}`),
+]));
 
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
@@ -49,16 +55,22 @@ export default function App() {
   const [pasteisModalItem, setPasteisModalItem] = useState(null);
   const [crepeModalItem, setCrepeModalItem] = useState(null);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
-  const [currentSubtotal, setCurrentSubtotal] = useState(0);
   const toastTimer = useRef(null);
+  const toastFrame = useRef(null);
 
   const showToast = useCallback((msg) => {
     setToast("");
     clearTimeout(toastTimer.current);
-    requestAnimationFrame(() => {
+    cancelAnimationFrame(toastFrame.current);
+    toastFrame.current = requestAnimationFrame(() => {
       setToast(msg);
       toastTimer.current = setTimeout(() => setToast(""), 1600);
     });
+  }, []);
+
+  useEffect(() => () => {
+    clearTimeout(toastTimer.current);
+    cancelAnimationFrame(toastFrame.current);
   }, []);
 
   useEffect(() => {
@@ -80,18 +92,11 @@ export default function App() {
     });
   }, []);
   const filtered = useMemo(() => {
-    const q = query
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+    const q = normalizeSearch(query);
     return ALL_ITEMS.filter((it) => {
       if (category !== "Tudo" && it.category !== category) return false;
       if (!q) return true;
-      const hay = `${it.name} ${it.desc || ""} ${it.category}`
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-      return hay.includes(q);
+      return searchIndex.get(it.id).includes(q);
     });
   }, [category, query]);
 
@@ -150,7 +155,7 @@ export default function App() {
         const existing = prev.find((x) => x.id === itemId);
         if (existing)
           return prev.map((x) =>
-            x.id === itemId ? { ...x, qty: x.qty + itemWithAddons.qty } : x
+            x.id === itemId ? { ...x, qty: x.qty + (itemWithAddons.qty ?? 1) } : x
           );
         return [
           ...prev,
@@ -334,8 +339,7 @@ export default function App() {
     showToast("Carrinho limpo");
   }, [showToast]);
 
-  const openPaymentModal = useCallback((subtotal) => {
-    setCurrentSubtotal(subtotal);
+  const openPaymentModal = useCallback(() => {
     setPaymentModalOpen(true);
   }, []);
 
@@ -345,13 +349,8 @@ export default function App() {
   const sendWA = useCallback(() => {
     if (cart.length === 0) return showToast("Carrinho vazio");
 
-    const fee = parseFloat((form.fee || "0").replace(",", ".")) || 0;
-    const subtotal = cart.reduce((s, i) => {
-      const basePrice = i.price || 0;
-      const addonsPrice = i.selectedAddons ? i.selectedAddons.reduce((sum, a) => sum + (a.price || 0), 0) : 0;
-      const acaiExtraPrice = i.extraPrice || 0;
-      return s + (basePrice + addonsPrice + acaiExtraPrice) * i.qty;
-    }, 0);
+    const fee = getDeliveryFee(form);
+    const subtotal = getSubtotal(cart);
     const total = subtotal + fee;
     const missing = cart
       .filter((i) => i.price == null)
@@ -368,14 +367,12 @@ export default function App() {
     lines.push(`💳 ${form.pay}`);
     lines.push("", "🧾 *Itens:*");
     cart.forEach((i) => {
-      const basePrice = i.price || 0;
-      const addonsPrice = i.selectedAddons ? i.selectedAddons.reduce((sum, a) => sum + (a.price || 0), 0) : 0;
-      const totalPrice = basePrice + addonsPrice;
+      const totalPrice = getUnitPrice(i);
       const p = totalPrice != null ? money(totalPrice) : "A confirmar";
       let itemLine = `  • ${i.qty}x ${i.name}`;
       if (i.selectedCobertura) {
         itemLine += ` [${i.selectedCobertura.emoji} ${i.selectedCobertura.name}`;
-        if (i.selectedComplementos.length > 0) {
+        if (i.selectedComplementos?.length > 0) {
           const complementsList = i.selectedComplementos.map((c) => `${c.emoji} ${c.name}`).join(", ");
           itemLine += ` + ${complementsList}`;
         }
@@ -391,13 +388,8 @@ export default function App() {
         const b2 = i.comboAddons.borda2?.name || "Sem Borda";
         const refri = i.comboAddons.refrigerante?.name;
         itemLine += ` [Pizza 1: ${s1} (${b1}), Pizza 2: ${s2} (${b2})${refri ? `, Refri: ${refri}` : ""}]`;
-      } else if (i.selectedAddons && i.selectedAddons.length > 0) {
-        const addonsList = i.selectedAddons.map((a) => a.name).join(", ");
-        const saborInfo = i.selectedSabor ? `, Sabor: ${i.selectedSabor.name}` : "";
-        const meioInfo = i.saborMeio ? ` (Meia ${i.saborMeio.name})` : "";
-        itemLine += ` [${addonsList}${saborInfo}${meioInfo}]`;
-      } else if (i.saborMeio) {
-        itemLine += ` [Meia ${i.saborMeio.name}]`;
+      } else {
+        itemLine += getPizzaDescription(i);
       }
       itemLine += ` — ${p}`;
       lines.push(itemLine);
@@ -413,16 +405,14 @@ export default function App() {
     const phone = CONFIG.phoneE164.replace(/\D/g, "");
     window.open(
       `https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`,
-      "_blank"
+      "_blank", "noopener,noreferrer"
     );
     setPaymentModalOpen(false);
   }, [cart, form, showToast]);
 
-  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
-
   return (
     <>
-      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} cartCount={cartCount} favorites={favorites} />
+      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
       <ClosedBanner />
 
       {activeSection === "home" && (
@@ -659,7 +649,7 @@ export default function App() {
           setForm={setForm}
           onConfirm={sendWA}
           onClose={closePaymentModal}
-          subtotal={currentSubtotal}
+          subtotal={getSubtotal(cart)}
         />
       )}
 

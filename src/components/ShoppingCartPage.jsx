@@ -1,9 +1,9 @@
 import { money } from "../utils/helpers";
-import { WhatsAppIcon } from "./Icons";
+import { getUnitPrice, getItemTotal, getSubtotal, getDeliveryFee } from "../utils/cart";
 import { getAvailableNeighborhoods, getDeliveryRate } from "../data/deliveryRates";
 
 function CartItem({ item, onInc, onDec }) {
-  const itemTotal = item.price != null ? item.price * item.qty : null;
+  const itemTotal = getItemTotal(item);
   
   return (
     <div className="shopping-cart-item-row">
@@ -18,7 +18,7 @@ function CartItem({ item, onInc, onDec }) {
       <div className="sci-details">
         <div className="sci-name">{item.name}</div>
         <div className="sci-category">{item.category || "Produto"}</div>
-        <div className="sci-price-small">{money(item.price || 0)}</div>
+        <div className="sci-price-small">{money(getUnitPrice(item) || 0)}</div>
       </div>
 
       <div className="sci-qty">
@@ -56,22 +56,17 @@ export default function ShoppingCartPage({
   };
 
   const handleCheckout = () => {
-    if (!form.neighborhood) {
+    if (cart.length === 0) return;
+    if (form.deliveryType !== "pickup" && !form.neighborhood) {
       alert("Por favor, selecione um bairro para continuar!");
       return;
     }
     onOpenPaymentModal(subtotal);
   };
 
-  const subtotal = cart.reduce((s, i) => {
-    const basePrice = i.price || 0;
-    const addonsPrice = i.selectedAddons
-      ? i.selectedAddons.reduce((sum, a) => sum + (a.price || 0), 0)
-      : 0;
-    return s + (basePrice + addonsPrice) * i.qty;
-  }, 0);
+  const subtotal = getSubtotal(cart);
 
-  const fee = parseFloat((form.fee || "0").replace(",", ".")) || 0;
+  const fee = getDeliveryFee(form);
   const total = subtotal + fee;
   const count = cart.reduce((s, i) => s + i.qty, 0);
 
@@ -147,7 +142,7 @@ export default function ShoppingCartPage({
                   <span className="scp-value">{money(subtotal)}</span>
                 </div>
 
-                <form className="scp-form">
+                <form className="scp-form" onSubmit={(event) => event.preventDefault()}>
                   <label className="scp-form-label">Bairro</label>
                   <div className="scp-input-group">
                     <select

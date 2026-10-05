@@ -1,4 +1,5 @@
-export const money = (v) =>
-  v == null
-    ? null
-    : v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const currencyFormatter = new Intl.NumberFormat("pt-BR", {
+  style: "currency", currency: "BRL",
+});
+
+export const money = (value) => value == null ? null : currencyFormatter.format(value);

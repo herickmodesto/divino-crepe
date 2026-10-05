@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CONFIG } from "../data/config";
 
 export default function Navigation({ activeSection, setActiveSection }) {

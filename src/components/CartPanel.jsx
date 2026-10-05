@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { money } from "../utils/helpers";
+import { getItemTotal, getSubtotal, getDeliveryFee } from "../utils/cart";
 import { getDeliveryRate, getAvailableNeighborhoods } from "../data/deliveryRates";
 
 const CATEGORY_EMOJI = {
@@ -8,12 +9,7 @@ const CATEGORY_EMOJI = {
 };
 
 function CartItem({ item, onInc, onDec }) {
-  const basePrice = item.price || 0;
-  const addonsPrice = item.selectedAddons
-    ? item.selectedAddons.reduce((s, a) => s + (a.price || 0), 0)
-    : 0;
-  const unitPrice = basePrice + addonsPrice;
-  const itemTotal = item.price != null ? unitPrice * item.qty : null;
+  const itemTotal = getItemTotal(item);
   const emoji = CATEGORY_EMOJI[item.category] || "🍽️";
 
   return (
@@ -49,13 +45,13 @@ function CartItem({ item, onInc, onDec }) {
       </div>
 
       <div className="ci-controls">
-        <button className="ci-btn minus" onClick={() => onDec(item.id)}>
+        <button className="ci-btn minus" onClick={() => onDec(item.id)} aria-label={`Diminuir quantidade de ${item.name}`}>
           <svg fill="none" viewBox="0 0 24 24" height="12" width="12">
             <path strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" stroke="currentColor" d="M20 12L4 12" />
           </svg>
         </button>
         <label className="ci-qty">{item.qty}</label>
-        <button className="ci-btn" onClick={() => onInc(item.id)}>
+        <button className="ci-btn" onClick={() => onInc(item.id)} aria-label={`Aumentar quantidade de ${item.name}`}>
           <svg fill="none" viewBox="0 0 24 24" height="12" width="12">
             <path strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" stroke="currentColor" d="M12 4V20M20 12H4" />
           </svg>
@@ -72,12 +68,7 @@ function CartItem({ item, onInc, onDec }) {
 export default function CartPanel({ cart, form, setForm, onInc, onDec, onClear, onOpenPaymentModal }) {
   const [neighborhoodError, setNeighborhoodError] = useState(false);
 
-  const subtotal = cart.reduce((s, i) => {
-    const base = i.price || 0;
-    const addons = i.selectedAddons ? i.selectedAddons.reduce((a, x) => a + (x.price || 0), 0) : 0;
-    const extra = i.extraPrice || 0;
-    return s + (base + addons + extra) * i.qty;
-  }, 0);
+  const subtotal = getSubtotal(cart);
 
   const neighborhoods = getAvailableNeighborhoods();
   const handleNeighborhoodChange = (n) => {
@@ -86,7 +77,7 @@ export default function CartPanel({ cart, form, setForm, onInc, onDec, onClear, 
     setNeighborhoodError(false);
   };
 
-  const fee = parseFloat((form.fee || "0").replace(",", ".")) || 0;
+  const fee = getDeliveryFee(form);
   const total = subtotal + fee;
   const count = cart.reduce((s, i) => s + i.qty, 0);
 

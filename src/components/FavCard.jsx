@@ -14,7 +14,7 @@ export default function FavCard({ item, onAdd, onFavorite }) {
       {/* Imagem + Preço */}
       <div className="fav-card-img-wrap">
         {item.image ? (
-          <img src={item.image} alt={item.name} className="fav-card-img" />
+          <img src={item.image} alt={item.name} className="fav-card-img" loading="lazy" decoding="async" />
         ) : (
           <div className="fav-card-emoji-bg">{item.emoji || "🍽️"}</div>
         )}
@@ -28,6 +28,7 @@ export default function FavCard({ item, onAdd, onFavorite }) {
         <input
           type="checkbox"
           defaultChecked
+          aria-label={`Remover ${item.name} dos favoritos`}
           onChange={handleRemove}
           id={uid}
           style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
