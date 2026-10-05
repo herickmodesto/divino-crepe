@@ -196,8 +196,8 @@ export default function AboutUs() {
                 <img src="/images/pizzas/calabresa.webp" alt="Pizza Artesanal" className="pj-img" />
                 <div className="pj-description">
                   <p className="pj-title"><strong>Pizzas Artesanais</strong></p>
-                  <p className="pj-info">Seg–Sex · Promoção</p>
-                  <p className="pj-price">R$ 24,00</p>
+                  <p className="pj-info">Promoção · Seg, ter e sex</p>
+                  <p className="pj-price">R$ 24,99</p>
                 </div>
               </div>
             </div>

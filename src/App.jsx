@@ -31,7 +31,6 @@ import FavCard from "./components/FavCard";
 import ClosedBanner from "./components/ClosedBanner";
 import PasteisModal from "./components/PasteisModal";
 import CrepeModal from "./components/CrepeModal";
-import PlanosSection from "./components/PlanosSection";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -111,6 +110,10 @@ export default function App() {
 
   const addToCart = useCallback(
     (item) => {
+      if (item.itemType === "pasteis") {
+        setPasteisModalItem(item);
+        return;
+      }
       if (item.acaiAddons) {
         setAcaiModalItem(item);
         return;
@@ -225,6 +228,8 @@ export default function App() {
         image: promoItem.image,
         category: "Promoção",
         pizzaSabores: promoItem.pizzaSabores || null,
+        pasteisSabores: promoItem.pasteisSabores || null,
+        crepeSabores: promoItem.crepeSabores || null,
       };
       if (promoItem.itemType === "combo") {
         setComboModalItem(base);
@@ -464,7 +469,7 @@ export default function App() {
               <div className="fav-empty-tips">
                 <div className="fav-tip">
                   <span>🍕</span>
-                  <p>Pizzas artesanais a partir de R$ 24</p>
+                  <p>Pizzas por R$ 24,99 · Seg, ter e sex</p>
                 </div>
                 <div className="fav-tip">
                   <span>🍫</span>
@@ -561,8 +566,6 @@ export default function App() {
           </div>
         </>
       )}
-
-      {activeSection === "planos" && <PlanosSection onOrderClick={() => setActiveSection("menu")} />}
 
       {activeSection === "about" && <AboutUs />}
 

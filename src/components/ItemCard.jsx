@@ -1,20 +1,8 @@
 import { money } from "../utils/helpers";
 import FavoriteButton from "./FavoriteButton";
-import { CONFIG } from "../data/config";
-
-// seg=1 … sex=5  |  sáb=6, dom=0
-const day = new Date(2026, 2, 23, 18, 0, 0).getDay(); // TESTE: segunda 18h
-const isPromoDay = day >= 1 && day <= 5;
 
 export default function ItemCard({ item, onAdd, onFavorite, isFavorited }) {
-  const isPromoItem =
-    CONFIG.promoCategories.includes(item.category) &&
-    item.price === CONFIG.promoWeekdayPrice;
-
-  // Preço real exibido: na promoção (seg-sex) mostra preço normal; fim de semana mostra R$25,90
-  const displayPrice = isPromoItem && !isPromoDay
-    ? CONFIG.promoWeekendPrice
-    : item.price;
+  const isPromoItem = Boolean(item.promo);
 
   const isMissing = item.price == null;
 
@@ -22,15 +10,15 @@ export default function ItemCard({ item, onAdd, onFavorite, isFavorited }) {
     <div className="item-card">
 
       {/* Badge de promoção */}
-      {isPromoItem && isPromoDay && (
-        <div className="promo-ribbon" aria-label="Promoção seg–sex">
+      {isPromoItem && (
+        <div className="promo-ribbon" aria-label="Promoção">
           PROMO
         </div>
       )}
 
       {item.image ? (
         <div className="item-image-container">
-          <img src={item.image} alt={item.name} className="item-image" loading="lazy" decoding="async" />
+          <img src={item.image} alt={`${item.name}; foto ilustrativa`} className="item-image" style={{ objectPosition: item.imagePosition }} loading="lazy" decoding="async" />
         </div>
       ) : (
         <div className="item-emoji">{item.emoji || "🍽️"}</div>
@@ -39,28 +27,20 @@ export default function ItemCard({ item, onAdd, onFavorite, isFavorited }) {
       <div className="item-info">
         <div className="item-name">{item.name}</div>
         {item.desc && <div className="item-desc">{item.desc}</div>}
-        {/* Mostrar preço de fim de semana como aviso quando não é promo */}
-        {isPromoItem && !isPromoDay && (
-          <div className="promo-weekend-note">📅 Hoje: R$ 25,90 · Seg–Sex: R$ 24,00</div>
-        )}
       </div>
 
       <div className="item-right">
         <div className={`item-price${isMissing ? " missing" : ""}`}>
           {isMissing ? (
             <strong>A consultar</strong>
-          ) : isPromoItem && isPromoDay ? (
+          ) : isPromoItem ? (
             <div className="promo-price-block">
-              <span className="promo-price-old">{money(CONFIG.promoWeekendPrice)}</span>
               <div className="promo-price-row">
-                <span className="promo-price-new">{money(CONFIG.promoWeekdayPrice)}</span>
-                <span className="promo-discount-badge">
-                  -{Math.round((1 - CONFIG.promoWeekdayPrice / CONFIG.promoWeekendPrice) * 100)}%
-                </span>
+                <span className="promo-price-new">{money(item.price)}</span>
               </div>
             </div>
           ) : (
-            <>A partir de <strong>{money(displayPrice)}</strong></>
+            <>A partir de <strong>{money(item.price)}</strong></>
           )}
         </div>
         <div className="item-actions">

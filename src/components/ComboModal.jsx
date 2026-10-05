@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { ADDONS, PIZZA_SABORES, REFRIGERANTES_COMBO } from "../data/menu";
+import { ADDONS, REFRIGERANTES_COMBO } from "../data/menu";
+import { COMBO_PIZZA_SABORES } from "../data/comboFlavors";
 import { money } from "../utils/helpers";
 
-function SaborSelector({ label, value, onChange }) {
+function SaborSelector({ label, value, onChange, sabores }) {
   return (
     <>
       <div className="am-section-header">
         <div className="am-section-info">
           <span className="am-section-title">{label}</span>
-          <span className="am-section-sub">Escolha 1 sabor.</span>
+          <span className="am-section-sub">Escolha 1 entre {sabores.length} sabores inclusos.</span>
         </div>
         {value && <span className="am-section-check">✓</span>}
       </div>
-      {PIZZA_SABORES.map((sabor) => {
+      {sabores.map((sabor) => {
         const isSel = value?.name === sabor.name;
         return (
           <button
@@ -104,6 +105,7 @@ function RefrigeranteSelector({ value, onChange }) {
 }
 
 export default function ComboModal({ item, onConfirm, onClose }) {
+  const sabores = item.pizzaSabores ?? COMBO_PIZZA_SABORES;
   const [sabor1, setSabor1] = useState(null);
   const [borda1, setBorda1] = useState(null);
   const [sabor2, setSabor2] = useState(null);
@@ -145,11 +147,11 @@ export default function ComboModal({ item, onConfirm, onClose }) {
           </div>
 
           <div className="am-options-scroll">
-            <SaborSelector label="Sabor Pizza 1" value={sabor1} onChange={setSabor1} />
+            <SaborSelector label="Sabor Pizza 1" value={sabor1} onChange={setSabor1} sabores={sabores} />
             <div className="combo-divider" />
             <BorderSelector label="Borda Pizza 1" value={borda1} onChange={setBorda1} />
             <div className="combo-divider" />
-            <SaborSelector label="Sabor Pizza 2" value={sabor2} onChange={setSabor2} />
+            <SaborSelector label="Sabor Pizza 2" value={sabor2} onChange={setSabor2} sabores={sabores} />
             <div className="combo-divider" />
             <BorderSelector label="Borda Pizza 2" value={borda2} onChange={setBorda2} />
             <div className="combo-divider" />

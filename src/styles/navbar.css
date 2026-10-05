@@ -503,7 +503,7 @@
     gap: 0;
     border-top: 1px solid var(--border);
     border-radius: 0;
-    background: rgba(12, 15, 20, 0.96);
+    background: var(--bg);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.28);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);

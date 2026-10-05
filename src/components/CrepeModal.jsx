@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CREPE_SABORES } from "../data/menu";
 import { money } from "../utils/helpers";
 
-function SaborSelector({ label, value, onChange }) {
+function SaborSelector({ label, value, onChange, sabores }) {
   return (
     <>
       <div className="am-section-header">
@@ -12,7 +12,7 @@ function SaborSelector({ label, value, onChange }) {
         </div>
         {value && <span className="am-section-check">✓</span>}
       </div>
-      {CREPE_SABORES.map((sabor) => {
+      {sabores.map((sabor) => {
         const isSel = value?.name === sabor.name;
         return (
           <button
@@ -36,6 +36,7 @@ function SaborSelector({ label, value, onChange }) {
 }
 
 export default function CrepeModal({ item, onConfirm, onClose }) {
+  const sabores = item.crepeSabores ?? CREPE_SABORES;
   const [crepe1, setCrepe1] = useState(null);
   const [crepe2, setCrepe2] = useState(null);
   const [crepe3, setCrepe3] = useState(null);
@@ -70,11 +71,11 @@ export default function CrepeModal({ item, onConfirm, onClose }) {
           </div>
 
           <div className="am-options-scroll">
-            <SaborSelector label="Crepe 1" value={crepe1} onChange={setCrepe1} />
+            <SaborSelector label="Crepe 1" value={crepe1} onChange={setCrepe1} sabores={sabores} />
             <div className="combo-divider" />
-            <SaborSelector label="Crepe 2" value={crepe2} onChange={setCrepe2} />
+            <SaborSelector label="Crepe 2" value={crepe2} onChange={setCrepe2} sabores={sabores} />
             <div className="combo-divider" />
-            <SaborSelector label="Crepe 3" value={crepe3} onChange={setCrepe3} />
+            <SaborSelector label="Crepe 3" value={crepe3} onChange={setCrepe3} sabores={sabores} />
           </div>
 
           <div className="am-bottom-bar">

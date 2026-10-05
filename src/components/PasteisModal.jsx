@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PASTEIS_SABORES } from "../data/menu";
 import { money } from "../utils/helpers";
 
-function SaborSelector({ label, value, onChange }) {
+function SaborSelector({ label, value, onChange, sabores }) {
   return (
     <>
       <div className="am-section-header">
@@ -12,7 +12,7 @@ function SaborSelector({ label, value, onChange }) {
         </div>
         {value && <span className="am-section-check">✓</span>}
       </div>
-      {PASTEIS_SABORES.map((sabor) => {
+      {sabores.map((sabor) => {
         const isSel = value?.name === sabor.name;
         return (
           <button
@@ -36,6 +36,7 @@ function SaborSelector({ label, value, onChange }) {
 }
 
 export default function PasteisModal({ item, onConfirm, onClose }) {
+  const sabores = item.pasteisSabores ?? PASTEIS_SABORES;
   const [sabor1, setSabor1] = useState(null);
   const [sabor2, setSabor2] = useState(null);
   const [qty, setQty] = useState(1);
@@ -69,9 +70,9 @@ export default function PasteisModal({ item, onConfirm, onClose }) {
           </div>
 
           <div className="am-options-scroll">
-            <SaborSelector label="Sabor do Pastel 1" value={sabor1} onChange={setSabor1} />
+            <SaborSelector label="Sabor do Pastel 1" value={sabor1} onChange={setSabor1} sabores={sabores} />
             <div className="combo-divider" />
-            <SaborSelector label="Sabor do Pastel 2" value={sabor2} onChange={setSabor2} />
+            <SaborSelector label="Sabor do Pastel 2" value={sabor2} onChange={setSabor2} sabores={sabores} />
           </div>
 
           <div className="am-bottom-bar">

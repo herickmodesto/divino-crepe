@@ -1,0 +1,87 @@
+.promotion-cta {
+  width: 210px;
+  max-width: 100%;
+  font-family: var(--font);
+}
+
+.promotion-coupon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid rgb(255 255 255 / 75%);
+  border-radius: 14px;
+  background: rgb(11 38 47 / 78%);
+  color: #fff;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.promotion-coupon-icon { width: 21px; height: 21px; flex-shrink: 0; color: #8fd9e9; }
+.promotion-coupon-title { white-space: nowrap; font-size: 15px; font-weight: 700; }
+.promotion-coupon-arrow { width: 18px; height: 18px; flex-shrink: 0; margin-left: auto; }
+.promotion-coupon:focus-visible { outline: 3px solid #8fd9e9; outline-offset: 4px; }
+
+.promotion-countdown { margin-top: 10px; color: #fff; text-align: center; }
+.promotion-countdown-label { margin: 0 0 7px; font-size: 11px; font-weight: 600; line-height: 1.5; }
+.promotion-timer { display: flex; justify-content: center; gap: 16px; }
+.promotion-timer-unit { position: relative; display: flex; flex-direction: column; gap: 4px; }
+.promotion-timer-number {
+  min-width: 42px;
+  padding: 5px 7px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 6px;
+  background: rgb(11 38 47 / 80%);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.promotion-timer-caption { font-size: 10px; color: #fff; }
+.promotion-timer-colon { position: absolute; left: -10px; top: 4px; font-size: 20px; }
+
+.hero-buttons { align-items: flex-start; }
+
+@media (hover: hover) and (pointer: fine) {
+  .promotion-coupon:hover { background: #123d4a; border-color: #8fd9e9; }
+}
+
+@media (max-width: 480px) {
+  .hero-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 390px;
+  }
+  .hero-buttons .btn-primary-hero {
+    width: 100%;
+    height: 48px;
+    padding: 8px 34px 8px 8px;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .hero-buttons .btn-primary-hero .btn-icon { width: 26px; height: 30px; }
+  .promotion-cta { width: 100%; min-width: 0; }
+  .promotion-coupon { gap: 7px; min-height: 48px; padding: 10px 8px; }
+  .promotion-coupon-icon { width: 18px; height: 18px; }
+  .promotion-coupon-title { font-size: 13px; }
+  .promotion-coupon-arrow { display: none; }
+  .promotion-countdown-label { font-size: 10px; }
+  .promotion-timer { gap: 10px; }
+  .promotion-timer-number { min-width: 31px; font-size: 16px; padding: 4px; }
+  .promotion-timer-colon { left: -7px; font-size: 16px; }
+  .promotion-timer-caption { font-size: 9px; }
+}
+
+@media (max-width: 340px) {
+  .hero-buttons { grid-template-columns: minmax(0, 1fr); max-width: 240px; }
+  .hero-buttons .btn-primary-hero { justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promotion-coupon { transition: none; }
+}

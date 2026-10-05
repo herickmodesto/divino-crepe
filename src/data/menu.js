@@ -1,16 +1,17 @@
+import { CONFIG } from "./config.js";
+import { PASTEIS_PROMO_SABORES, PASTEIS_PROMOTION, isPasteisPromotionActive, isPromotionDay, getPizzaPrice } from "./promotions.js";
+
+import { PIZZA_CATALOG } from "./pizzaCatalog.js";
+const pizzaPromo = isPromotionDay();
+
 export const ADDONS = [
   { name: "Sem Borda", price: 0, emoji: "🚫" },
-  { name: "Cheddar", price: 6.0, emoji: "🧀" },
-  { name: "Catupiry", price: 6.0, emoji: "🫧" },
-  { name: "Chocolate", price: 8.0, emoji: "🍫" },
+  { name: "Cheddar", price: 7.0, emoji: "🧀" },
+  { name: "Catupiry", price: 7.0, emoji: "🫧" },
+  { name: "Chocolate", price: 10.0, emoji: "🍫" },
 ];
 
-export const PASTEIS_SABORES = [
-  { name: "Calabresa", emoji: "🌶️" },
-  { name: "Queijo e Presunto", emoji: "🧀" },
-  { name: "Frango com Catupiry", emoji: "🍗" },
-  { name: "Queijo Coalho", emoji: "🫕" },
-];
+export const PASTEIS_SABORES = PASTEIS_PROMO_SABORES;
 
 export const CREPE_SABORES = [
   { name: "Batom (doce)", emoji: "🍬" },
@@ -23,19 +24,12 @@ export const CREPE_SABORES = [
   { name: "Frango c/ Catupiry", emoji: "🍗" },
 ];
 
-export const PIZZA_SABORES = [
-  { name: "Calabresa", price: 24.0, emoji: "🍕" },
-  { name: "Mussarela", price: 24.0, emoji: "🧀" },
-  { name: "Frango com Cheddar", price: 24.0, emoji: "🍗" },
-  { name: "Chocolate", price: 24.0, emoji: "🍫" },
-  { name: "Marguerita", price: 24.0, emoji: "🍅" },
-  { name: "Frango com Catupiry", price: 28.9, emoji: "🍗" },
-  { name: "Chocolate com Banana", price: 27.9, emoji: "🍌" },
-  { name: "Banana Nevada", price: 27.9, emoji: "🍫" },
-  { name: "Chocolate com Confete", price: 26.9, emoji: "🍬" },
-];
+export const PIZZA_SABORES = Object.values(PIZZA_CATALOG).flat().map(({ name, emoji }) => ({
+  name, emoji, price: getPizzaPrice(new Date(), name),
+}));
 
 export const REFRIGERANTES_COMBO = [
+  { name: "Coca-Cola 1L", emoji: "🥤" },
   { name: "Pepsi 1L", emoji: "🥤" },
   { name: "Guaraná 1L", emoji: "🥤" },
   { name: "Fanta Laranja 1L", emoji: "🍊" },
@@ -60,26 +54,15 @@ export const ACAI_COMPLEMENTOS = [
 ];
 
 export const MENU = {
-  "Pizzas": [
-    { name: "Calabresa", price: 24.0, desc: "Molho, calabresa, cebola e orégano.", emoji: "🍕", image: "/images/pizzas/calabresa.webp", addons: true },
-    { name: "Mussarela", price: 24.0, desc: "Molho, mussarela e orégano.", emoji: "🧀", image: "/images/pizzas/mussarela.webp", addons: true },
-    { name: "Frango com Cheddar", price: 24.0, desc: "Molho, frango, mussarela, cheddar e orégano.", emoji: "🍗", image: "/images/pizzas/sheddar.webp", addons: true },
-    { name: "Chocolate", price: 24.0, desc: "Creme de leite e chocolate.", emoji: "🍫", image: "/images/pizzas/chocolate.webp", addons: true },
-    { name: "Portuguesa", price: 28.9, desc: "Molho, mussarela, presunto de peru, ovo cozido, ervilha, cebola e orégano.", emoji: "🥚", image: "/images/pizzas/portuguesa.webp", addons: true },
-    { name: "Marguerita", price: 24.0, desc: "Molho, mussarela, tomate, manjericão e orégano.", emoji: "🍅", image: "/images/pizzas/marguerita.webp", addons: true },
-    { name: "Sertanejo", price: 38.9, desc: "Molho, mussarela, carne de sol, queijo coalho, cebola e orégano.", emoji: "🥩", image: "/images/pizzas/sertanejo.webp", addons: true },
-  ],
-  "Pizzas Premium": [
-    { name: "Lombo", price: 28.9, desc: "Molho, mussarela, lombo suíno, requeijão e orégano.", emoji: "🥓", image: "/images/pizzas/lombo.webp", addons: true },
-    { name: "Frango com Catupiry", price: 28.9, desc: "Molho, frango, mussarela, catupiry e orégano.", emoji: "🍗", image: "/images/pizzas/Frango_com_Catupiry.webp", addons: true },
-    { name: "Camarão Internacional", price: 44.9, desc: "Molho, mussarela, camarão, requeijão e orégano.", emoji: "🦐", image: "/images/pizzas/Camarão_Internacional.webp", addons: true },
-    { name: "Carne de Sol com Nata", price: 37.9, desc: "Molho, mussarela, carne de sol com nata e orégano.", emoji: "🥩", image: "/images/pizzas/Carne_de_Sol_com_Nata.webp", addons: true },
-  ],
-  "Doces Premium": [
-    { name: "Chocolate com Banana", price: 27.9, desc: "Creme de leite, banana, mussarela e chocolate ao leite.", emoji: "🍌", image: "/images/pizzas/Chocolate_com_Banana.webp", addons: true },
-    { name: "Banana Nevada", price: 27.9, desc: "Creme de leite, banana, mussarela e chocolate branco.", emoji: "🍫", image: "/images/pizzas/Banana_Nevada.webp", addons: true },
-    { name: "Chocolate com Confete", price: 26.9, desc: "Creme de leite, mussarela, chocolate e confete.", emoji: "🍬", image: "/images/pizzas/Chocolate_com_Confete.webp", addons: true },
-  ],
+  ...Object.fromEntries(Object.entries(PIZZA_CATALOG).map(([category, items]) => [
+    category,
+    items.map((item) => ({
+      ...item,
+      price: getPizzaPrice(new Date(), item.name),
+      promo: pizzaPromo && item.price > getPizzaPrice(new Date(), item.name),
+      addons: true,
+    })),
+  ])),
   "Crepe Suíço": [
     { name: "Batom (doce)", price: 6.0, desc: "", emoji: "🍬", image: "/images/crepes/crepe.webp" },
     { name: "Nutella (doce)", price: 6.0, desc: "", emoji: "🌰", image: "/images/crepes/crepechocolate.webp" },
@@ -107,6 +90,7 @@ export const MENU = {
     { name: "Frango com Catupiry", price: 10.0, desc: "", emoji: "🍗", image: "/images/pasteis/pasteis.webp" },
     { name: "Carne de Sol", price: 12.0, desc: "", emoji: "🥩", image: "/images/pasteis/pasteis.webp" },
     { name: "Frango c/ Bacon", price: 12.0, desc: "", emoji: "🥓", image: "/images/pasteis/pasteis.webp" },
+    ...(isPasteisPromotionActive() ? [{ name: PASTEIS_PROMOTION.title, price: CONFIG.pasteisPromoPrice, promo: true, desc: PASTEIS_PROMOTION.description, emoji: "🥟", image: PASTEIS_PROMOTION.image, itemType: "pasteis" }] : []),
   ],
   "Milkshakes": [
     { name: "Ninho c/ Nutella", price: 12.99, desc: "", emoji: "🥛", image: "/images/milkshakes/ninho com nutella.webp" },

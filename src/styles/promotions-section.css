@@ -1,0 +1,79 @@
+/* Original Divino Crepe styling: product-first offer cards and clear order actions. */
+.dc-deals {
+  --deals-ink: #12333c;
+  --deals-muted: #536971;
+  --deals-accent: #087c97;
+  position: relative;
+  width: 100%;
+  padding: 76px 24px 64px;
+  background: #f5f8f8;
+  color: var(--deals-ink);
+  font-family: var(--font);
+  border-top: 1px solid #e1eaec;
+  scroll-margin-top: 100px;
+}
+
+.dc-deals:focus { outline: none; }
+.dc-deals:focus-visible { outline: 3px solid var(--deals-accent); outline-offset: -3px; }
+.dc-deals-container { max-width: 1200px; margin: 0 auto; }
+.dc-deals-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 36px; }
+.dc-deals-heading { min-width: 0; }
+.dc-deals-eyebrow { display: inline-block; margin-bottom: 14px; color: var(--deals-accent); font-size: 12px; font-weight: 800; letter-spacing: 1.8px; }
+.dc-deals-heading h2 { margin: 0; font-family: var(--font); font-size: clamp(30px, 3.5vw, 46px); font-weight: 800; line-height: 1.12; letter-spacing: -1.6px; }
+.dc-deals-heading h2 span { color: var(--deals-accent); }
+.dc-deals-heading p { margin: 16px 0 0; color: var(--deals-muted); font-size: 15px; line-height: 1.65; }
+.dc-deals-schedule { flex-shrink: 0; padding: 0 0 4px 24px; border-left: 1px solid #d5e3e6; }
+.dc-deals-schedule-title { display: block; margin-bottom: 10px; font-size: 12px; font-weight: 700; }
+.dc-deals-days { display: flex; gap: 6px; }
+.dc-deals-days span { padding: 7px 12px; border-radius: 6px; background: #e0f2f6; color: #126078; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+.dc-deals-schedule p { margin: 10px 0 0; color: var(--deals-muted); font-size: 12px; line-height: 1.5; }
+
+.dc-deals-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.dc-deal-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #dfe8ea; border-radius: 18px; background: #fff; box-shadow: 0 4px 18px rgb(18 51 60 / 4%); }
+.dc-deal-card--featured { border-color: #53b7cc; }
+.dc-deal-photo { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #e7eded; }
+.dc-deal-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dc-deal-badge { position: absolute; top: 14px; left: 14px; padding: 7px 11px; border: 1px solid rgb(18 51 60 / 8%); border-radius: 7px; background: #fff; color: var(--deals-ink); box-shadow: 0 2px 8px rgb(0 0 0 / 8%); font-size: 11px; font-weight: 800; }
+.dc-deal-card--featured .dc-deal-badge { border-color: transparent; background: #d9f3f8; color: #125366; }
+.dc-deal-content { display: flex; flex: 1; flex-direction: column; padding: 22px; }
+.dc-deal-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 10px; margin-bottom: 9px; color: var(--deals-accent); font-size: 11px; font-weight: 700; }
+.dc-deal-availability { color: var(--deals-muted); font-size: 10px; font-weight: 500; }
+.dc-deal-content h3 { margin: 0; font-family: var(--font); font-size: 22px; font-weight: 800; line-height: 1.3; letter-spacing: -0.6px; }
+.dc-deal-description { margin: 12px 0 24px; color: var(--deals-muted); font-size: 13px; line-height: 1.7; }
+.dc-deal-footer { margin-top: auto; }
+.dc-deal-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 18px; color: var(--deals-ink); }
+.dc-deal-currency { font-size: 14px; font-weight: 700; }
+.dc-deal-amount { font-size: 38px; font-weight: 800; line-height: 1; letter-spacing: -1.7px; font-variant-numeric: tabular-nums; }
+.dc-deal-amount > span { font-size: 23px; letter-spacing: -0.7px; }
+.dc-deal-order { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 48px; padding: 12px 16px; border: 0; border-radius: 9px; background: var(--deals-accent); color: #fff; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; touch-action: manipulation; transition: background-color 0.2s ease; }
+.dc-deal-order svg { flex-shrink: 0; width: 19px; height: 19px; }
+.dc-deal-order:focus-visible { outline: 3px solid var(--deals-ink); outline-offset: 4px; }
+.dc-deals-footnote { margin: 24px 0 0; color: var(--deals-muted); font-size: 11px; line-height: 1.6; text-align: center; }
+
+@media (hover: hover) and (pointer: fine) {
+  .dc-deal-order:hover { background: #06677e; }
+}
+
+@media (max-width: 1000px) {
+  .dc-deals-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .dc-deals-header { align-items: flex-start; }
+  .dc-deals-schedule { max-width: 220px; }
+}
+
+@media (max-width: 600px) {
+  .dc-deals { padding: 44px 18px 38px; }
+  .dc-deals-header { flex-direction: column; gap: 22px; margin-bottom: 26px; }
+  .dc-deals-heading h2 { font-size: 32px; letter-spacing: -1px; }
+  .dc-deals-heading p { font-size: 14px; }
+  .dc-deals-schedule { width: 100%; max-width: none; padding: 16px 0 0; border-left: 0; border-top: 1px solid #d5e3e6; }
+  .dc-deals-schedule-title { margin-bottom: 8px; }
+  .dc-deals-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .dc-deal-content { padding: 20px; }
+  .dc-deal-content h3 { font-size: 21px; }
+  .dc-deal-description { margin-bottom: 22px; font-size: 13px; }
+  .dc-deal-order { font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dc-deal-order { transition: none; }
+}
